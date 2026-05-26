@@ -2,81 +2,51 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - Free Cloud</title>
+    <title>ZyrClient Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
-        }
-    </style>
 </head>
-<body class="text-white min-h-screen flex flex-col items-center justify-center p-4">
-
-    <div class="bg-slate-900/80 border border-slate-700/50 rounded-2xl shadow-2xl p-6 w-full max-w-md backdrop-blur-md">
+<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+        <img src="Wbg.png" class="w-full h-40 object-cover rounded-xl mb-4 border border-slate-700">
         
-        <h1 class="text-3xl font-bold text-center text-blue-400 mb-6 tracking-wide">ZyrClient Free Cloud</h1>
+        <input type="number" id="waNumber" placeholder="Nomor WA (628...)" class="w-full p-3 bg-slate-800 rounded-lg mb-4 text-white border border-slate-600">
         
-        <div class="w-full h-44 rounded-xl overflow-hidden mb-6 border border-slate-700 shadow-inner">
-            <img src="Wbg.png" alt="ZyrClient Banner" class="w-full h-full object-cover">
+        <button onclick="getPairingCode()" class="w-full p-3 bg-emerald-600 rounded-lg font-bold mb-4">Dapatkan Pairing Code</button>
+        
+        <div id="codeDisplay" class="p-4 bg-slate-800 border-2 border-dashed border-amber-500 text-center text-2xl font-mono text-amber-400 rounded-lg mb-4">
+            - - - - - - - -
         </div>
-
-        <div class="mb-5">
-            <label class="block text-sm font-semibold text-slate-300 mb-2">Nomor WhatsApp Global:</label>
-            <input type="number" id="waNumber" placeholder="Contoh: 6285194814013" 
-                   class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white font-medium placeholder-slate-500">
-        </div>
-
-        <button id="btnLogin" onclick="requestPairingCode()" 
-                class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-bold rounded-lg transition-all shadow-lg shadow-emerald-500/20 mb-6">
-            Dapatkan Pairing Code Instan
-        </button>
-
-        <div class="mb-5">
-            <label class="block text-sm font-semibold text-slate-300 mb-2">Pairing Code Kamu:</label>
-            <div id="pairingCodeDisplay" class="w-full py-4 bg-slate-800/80 border-2 border-dashed border-amber-500 rounded-lg text-center text-3xl font-extrabold tracking-widest text-amber-400 shadow-inner">
-                - - - - - - - -
-            </div>
-        </div>
-
-        <div class="mb-6">
-            <label class="block text-sm font-semibold text-slate-300 mb-2">Status Koneksi:</label>
-            <div id="statusDisplay" class="w-full p-3 bg-black/50 border border-slate-800 rounded-lg font-mono text-xs text-center uppercase tracking-wider text-slate-400">
-                Murni GitHub Mode
-            </div>
-        </div>
-
-        <hr class="border-slate-700/50 my-6">
-
-        <div class="mb-4">
-            <label class="block text-sm font-semibold text-slate-300 mb-2">Isi File Foto / Video (Story WA):</label>
-            <input type="file" id="storyFile" accept="image/*,video/*" 
-                   class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
-        </div>
-
-        <button id="btnUpload" onclick="uploadToStory()" 
-                class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg transition-all shadow-md">
-            Upload ke Story WA
-        </button>
-
+        
+        <div id="status" class="text-xs text-slate-400 text-center font-mono">Status: Standby</div>
     </div>
 
     <script>
-        async function requestPairingCode() {
-            const number = document.getElementById('waNumber').value.trim();
-            const statusBox = document.getElementById('statusDisplay');
-            
-            if(!number) return alert("Masukkan nomor WhatsApp terlebih dahulu!");
+        // ⚠️ GANTI DENGAN LINK CLOUDFLARE KAMU
+        const BACKEND = "https://bottle-humor-acids-mats.trycloudflare.com "; 
 
-            // Menampilkan pesan realita teknis
-            alert("Sistem Murni GitHub (Tanpa Server & Token) tidak dapat memproses Baileys WhatsApp. Ini akan selalu berujung 'Failed to Fetch' karena tidak ada server backend (Termux/Render) yang menyambungkan web ini ke WhatsApp.");
+        async function getPairingCode() {
+            const number = document.getElementById('waNumber').value;
+            const codeDisplay = document.getElementById('codeDisplay');
+            const status = document.getElementById('status');
             
-            statusBox.innerText = "GAGAL TERHUBUNG (TIDAK ADA SERVER BACKEND)";
-            statusBox.style.color = "#ef4444";
-        }
+            codeDisplay.innerText = "LOADING...";
+            status.innerText = "Status: Menghubungkan...";
 
-        async function uploadToStory() {
-            alert("Fitur upload membutuhkan server backend (Termux/Render) atau Token API yang valid.");
+            try {
+                const res = await fetch(`${BACKEND}/api/connect?number=${number}`);
+                const data = await res.json();
+                
+                if(data.code) {
+                    codeDisplay.innerText = data.code;
+                    status.innerText = "Status: Berhasil Terhubung";
+                } else {
+                    throw new Error("Gagal");
+                }
+            } catch (err) {
+                codeDisplay.innerText = "ERROR";
+                status.innerText = "Status: Backend Tidak Terjangkau";
+                alert("Pastikan kamu sudah menjalankan 'cloudflared tunnel' di Termux dan link sudah benar!");
+            }
         }
     </script>
 </body>
