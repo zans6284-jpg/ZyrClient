@@ -3,184 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - WA Global</title>
+    <title>ZyrClient - WhatsApp Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { 
-            --bg: linear-gradient(135deg, #0f172a, #1e3a8a, #4c1d95, #2563eb); 
-            --panel: rgba(30, 58, 138, 0.7); 
-            --magenta: #d946ef; 
-        }
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: monospace, sans-serif; 
-            color: white; 
-        }
-        body { 
-            background: var(--bg); 
-            background-size: 400% 400%; 
-            animation: wave 15s ease infinite; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 40px 20px; 
-        }
-        @keyframes wave { 
-            0% { background-position: 0% 50%; } 
-            100% { background-position: 100% 50%; } 
-        }
-        
-        .container { 
-            width: 100%; 
-            max-width: 700px; 
-            background: var(--panel); 
-            border: 1px solid rgba(59,130,246,0.5); 
-            border-radius: 20px; 
-            padding: 30px; 
-            text-align: center; 
-            backdrop-filter: blur(10px); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        h1 { 
-            color: #3b82f6; 
-            margin-bottom: 20px; 
-            font-family: sans-serif; 
-            font-size: 2.5rem;
-            letter-spacing: 2px;
-        }
-        
-        .img-box { 
-            width: 100%; 
-            height: 200px; 
-            background: #000; 
-            border-radius: 12px; 
-            margin-bottom: 20px; 
-            overflow: hidden; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .img-box img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-        }
-        
-        input[type="number"], input[type="file"] { 
-            width: 100%; 
-            padding: 15px; 
-            background: rgba(0,0,0,0.5); 
-            border-radius: 12px; 
-            border: 2px solid #3b82f6; 
-            margin-bottom: 15px; 
-            font-size: 1rem; 
-            outline: none; 
-            transition: 0.3s;
-        }
-        input[type="number"]:focus { 
-            border-color: var(--magenta); 
-            box-shadow: 0 0 10px rgba(217,70,239,0.5);
-        }
-        
-        button { 
-            width: 100%; 
-            padding: 15px; 
-            border: none; 
-            border-radius: 12px; 
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            font-family: sans-serif; 
-            margin-bottom: 20px; 
-        }
-        #btnLogin { 
-            background: linear-gradient(90deg, #25D366, #128C7E); 
-        }
-        #btnUpload { 
-            background: linear-gradient(90deg, #3b82f6, var(--magenta)); 
-            margin-top: 10px;
-            margin-bottom: 5px;
-        }
-        button:hover:not(:disabled) { 
-            transform: translateY(-2px); 
-            filter: brightness(1.2); 
-        }
-        button:disabled {
-            background: #475569 !important;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .display-box { 
-            width: 100%; 
-            padding: 15px; 
-            border-radius: 12px; 
-            background: #000; 
-            border: 1px solid #333; 
-            text-align: left; 
-            margin-bottom: 15px; 
-            font-size: 1rem; 
-        }
-        .pairing-card { 
-            text-align: center; 
-            font-size: 2.2rem; 
-            font-weight: bold; 
-            color: #fbbf24; 
-            letter-spacing: 5px; 
-            background: rgba(251,191,36,0.1); 
-            border: 2px dashed #fbbf24; 
-        }
-        .section-title { 
-            font-size: 1rem; 
-            text-align: left; 
-            margin-bottom: 5px; 
-            color: #cbd5e1; 
-            font-weight: bold; 
+        body {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
         }
     </style>
 </head>
-<body>
+<body class="text-white min-h-screen flex flex-col items-center justify-center p-4">
 
-    <h1>ZyrClient</h1>
-    
-    <div class="container">
-        <div class="img-box">
-            <img src="Wbg.png" alt="Wbg Logo" onerror="this.src='https://via.placeholder.com/600x200/128C7E/FFFFFF?text=Wbg.png';">
+    <div class="bg-slate-900/80 border border-slate-700/50 rounded-2xl shadow-2xl p-6 w-full max-w-md backdrop-blur-md">
+        
+        <h1 class="text-3xl font-bold text-center text-blue-400 mb-6 tracking-wide">ZyrClient</h1>
+        
+        <div class="w-full h-44 rounded-xl overflow-hidden mb-6 border border-slate-700 shadow-inner">
+            <img src="https://images.uncyc.org/indonesia/thumb/5/52/Shadow_Sama.jpg/300px-Shadow_Sama.jpg" alt="ZyrClient Banner" class="w-full h-full object-cover">
         </div>
-        
-        <div class="section-title">Nomor WhatsApp Global:</div>
-        <input type="number" id="waNumber" placeholder="Contoh: 6285194814013">
-        
-        <button id="btnLogin" onclick="requestPairingCode()">Login & Dapatkan Pairing Code</button>
-        
-        <div class="section-title">Pairing Code Kamu:</div>
-        <div class="display-box pairing-card" id="pairingCodeDisplay">- - - - - - - -</div>
-        
-        <div class="section-title">Status Koneksi:</div>
-        <div class="display-box" id="statusDisplay" style="color: #ef4444; font-weight: bold;">DISCONNECTED</div>
-        
-        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 25px 0;">
-        
-        <div class="section-title">Isi File Foto / Video (Story WA):</div>
-        <input type="file" id="storyFile" accept="image/*, video/*">
-        
-        <button id="btnUpload" onclick="uploadToStory()">Upload ke Story WA</button>
+
+        <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-300 mb-2">Nomor WhatsApp Global:</label>
+            <input type="number" id="waNumber" placeholder="Contoh: 6285194814013" 
+                   class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white font-medium placeholder-slate-500">
+        </div>
+
+        <button id="btnLogin" onclick="requestPairingCode()" 
+                class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-bold rounded-lg transition-all shadow-lg shadow-emerald-500/20 mb-6">
+            Login & Dapatkan Pairing Code
+        </button>
+
+        <div class="mb-5">
+            <label class="block text-sm font-semibold text-slate-300 mb-2">Pairing Code Kamu:</label>
+            <div id="pairingCodeDisplay" class="w-full py-4 bg-slate-800/80 border-2 border-dashed border-amber-500 rounded-lg text-center text-3xl font-extrabold tracking-widest text-amber-400 shadow-inner">
+                - - - - - - - -
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-sm font-semibold text-slate-300 mb-2">Status Koneksi:</label>
+            <div id="statusDisplay" class="w-full p-3 bg-black/50 border border-slate-800 rounded-lg font-mono text-xs text-center uppercase tracking-wider text-slate-400">
+                Menunggu Perintah...
+            </div>
+        </div>
+
+        <hr class="border-slate-700/50 my-6">
+
+        <div class="mb-4">
+            <label class="block text-sm font-semibold text-slate-300 mb-2">Pilih File Foto / Video:</label>
+            <input type="file" id="storyFile" accept="image/*,video/*" 
+                   class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
+        </div>
+
+        <button id="btnUpload" onclick="uploadToStory()" 
+                class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg transition-all shadow-md">
+            Upload ke Story WA
+        </button>
+
     </div>
 
-    <a href="index.html" style="display:block; margin-top:20px; color:#cbd5e1; text-decoration:none;">&larr; Kembali ke Utama</a>
-
     <script>
-        // ⚠️ PENTING: Ganti link di bawah ini dengan link Pinggy kamu yang PALING BARU (Wajib pakai https://)
-        const BACKEND_URL = "https://llhmd-140-213-158-138.run.pinggy-free.link";
-
-        // Fungsi bantu untuk memastikan URL bersih (tanpa garis miring di belakang)
-        const getBaseUrl = () => {
-            return BACKEND_URL.endsWith('/') ? BACKEND_URL.slice(0, -1) : BACKEND_URL;
-        };
+        // ⚠️ MASUKKAN LINK TUNNEL PINGGY KAMU YANG SEDANG AKTIF DI SINI (Jangan beri tanda '/' di ujungnya!)
+        const BACKEND_URL = "https://llhmd-140-213-158-138.run.pinggy-free.link"; 
 
         async function requestPairingCode() {
             const number = document.getElementById('waNumber').value.trim();
@@ -189,48 +72,51 @@
             const statusBox = document.getElementById('statusDisplay');
             
             if(!number) return alert("Masukkan nomor WhatsApp terlebih dahulu!");
-            if(number.includes('+')) return alert("Masukkan nomor tanpa menggunakan tanda '+' !");
+            if(number.includes('+')) return alert("Gunakan format angka langsung saja (contoh: 6285xxx) tanpa tanda '+' !");
 
-            // Mode Loading
+            // Animasi Loading UI
             btn.innerText = "Memproses...";
             btn.disabled = true;
             codeBox.innerText = "LOADING...";
-            statusBox.innerText = "CONNECTING TO SERVER...";
+            statusBox.innerText = "MENGHUBUNGI BACKEND...";
             statusBox.style.color = "#fbbf24";
 
             try {
-                // Menambahkan header khusus agar Pinggy tidak memblokir API kita
-                const response = await fetch(`${getBaseUrl()}/api/connect?number=${number}`, {
+                // Rute endpoint yang tepat sasaran agar tidak memicu error 404 lagi
+                const targetUrl = `${BACKEND_URL}/api/connect?number=${number}`;
+                console.log("Mengirim request ke URL:", targetUrl);
+
+                const response = await fetch(targetUrl, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
-                        'x-pinggy-no-interstitial': 'true'
+                        'x-pinggy-no-interstitial': 'true' // Bypass halaman warning Pinggy
                     }
                 });
                 
+                // Menangkap kegagalan rute (seperti 404 Not Found)
                 if (!response.ok) {
-                    throw new Error(`Server memblokir request (Status: ${response.status})`);
+                    throw new Error(`Server Merespon ${response.status}. Pastikan server.js berjalan di port 8080!`);
                 }
                 
                 const data = await response.json();
 
                 if(data.status === "pairing") {
                     codeBox.innerText = data.code;
-                    statusBox.innerText = "MASUKKAN KODE DI NOTIFIKASI WA KAMU!";
+                    statusBox.innerText = "KODE BERHASIL DIDAPAT! CEK NOTIFIKASI WA KAMU";
                     statusBox.style.color = "#fbbf24";
                 } else if(data.status === "connected") {
                     codeBox.innerText = "CONNECTED";
-                    statusBox.innerText = "CONNECTED (Sudah Terhubung)";
+                    statusBox.innerText = "SUKSES: LOGGED IN (Sudah Terhubung)";
                     statusBox.style.color = "#25D366";
                 } else {
-                    throw new Error(data.message || "Gagal mendapatkan kode.");
+                    throw new Error(data.message || "Gagal mendapatkan respon valid.");
                 }
             } catch (error) {
                 codeBox.innerText = "ERROR";
-                // Tampilkan pesan error spesifik
-                statusBox.innerText = "GAGAL TERHUBUNG: " + error.message;
+                statusBox.innerText = "GAGAL: " + error.message;
                 statusBox.style.color = "#ef4444";
-                console.error("Fetch Error Detail:", error);
+                console.error("Detail Error:", error);
             } finally {
                 btn.innerText = "Login & Dapatkan Pairing Code";
                 btn.disabled = false;
@@ -254,7 +140,7 @@
                 const fileType = file.type.startsWith('image/') ? 'image' : 'video';
 
                 try {
-                    const response = await fetch(`${getBaseUrl()}/api/upload-story`, {
+                    const response = await fetch(`${BACKEND_URL}/api/upload-story`, {
                         method: 'POST',
                         headers: { 
                             'Content-Type': 'application/json',
