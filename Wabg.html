@@ -18,10 +18,21 @@
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
         input, select { width: 100%; padding: 15px; background: rgba(0,0,0,0.4); border-radius: 12px; border: 2px solid #3b82f6; margin-bottom: 15px; font-size: 1rem; outline: none; }
-        button { width: 100%; padding: 15px; border: none; border-radius: 12px; background: linear-gradient(90deg, #25D366, #128C7E); font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: 0.3s; font-family: sans-serif;}
-        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37,211,102,0.4); }
         
-        .monitor { background: #000; border: 1px solid #333; border-radius: 10px; padding: 15px; text-align: left; height: 150px; overflow-y: auto; color: #0f0; margin-bottom: 15px; font-size: 0.9rem; }
+        .btn-group { display: flex; gap: 15px; margin-bottom: 10px; }
+        button { flex: 1; padding: 15px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: sans-serif; }
+        
+        #btnLogin { background: linear-gradient(90deg, #25D366, #128C7E); }
+        #btnLogin:hover:not(:disabled) { box-shadow: 0 5px 15px rgba(37,211,102,0.4); transform: translateY(-2px); }
+        #btnLogin:disabled { background: #64748b; cursor: not-allowed; }
+        
+        #btnStop { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+        #btnStop:hover:not(:disabled) { box-shadow: 0 5px 15px rgba(239,68,68,0.4); transform: translateY(-2px); }
+        #btnStop:disabled { background: #64748b; cursor: not-allowed; }
+        
+        .plugin-btn { background: #1e3a8a; width: 100%; margin-top: 10px; }
+        
+        .monitor { background: #000; border: 1px solid #333; border-radius: 10px; padding: 15px; text-align: left; height: 200px; overflow-y: auto; color: #0f0; margin-bottom: 15px; font-size: 0.9rem; font-family: monospace; }
     </style>
 </head>
 <body>
@@ -33,7 +44,7 @@
             <img src="Wbg.png" alt="Wbg Logo" onerror="this.src='https://via.placeholder.com/600x150/128C7E/FFFFFF?text=Wbg.png';">
         </div>
         
-        <input type="number" id="waNumber" placeholder="Nomor Global (cth: 628123456789) tanpa '+'">
+        <input type="number" id="waNumber" placeholder="Nomor Global tanpa '+' (cth: 628123456789)">
         
         <select id="timeSelect">
             <option value="1000">1. 1 dtk</option>
@@ -41,50 +52,123 @@
             <option value="10000">3. 10 dtk</option>
         </select>
         
-        <button onclick="loginEbg()">Tombol Login</button>
-        
-        <div class="monitor" id="monitorLog">
-            > Standby...
+        <div class="btn-group">
+            <button id="btnLogin" onclick="startLogin()">Login</button>
+            <button id="btnStop" onclick="stopLogin()" disabled>Stop</button>
         </div>
         
-        <button onclick="downloadPluginWA()" style="background: #1e3a8a;">Download Plugin</button>
+        <div class="monitor" id="monitorLog">
+            > Standby console...
+        </div>
+        
+        <button class="plugin-btn" onclick="downloadPluginWA()">Download Plugin</button>
     </div>
     <a href="index.html" style="display:block; margin-top:20px; color:#cbd5e1; font-family:sans-serif; text-decoration:none;">Kembali</a>
 
     <script>
+        let intervalId = null;
+        let isRunning = false;
+
+        // Fungsi untuk mencetak log ke monitor
         function logMsg(msg, color = "#0f0") {
             const m = document.getElementById('monitorLog');
-            m.innerHTML += `<br><span style="color:${color}">> ${msg}</span>`;
+            const time = new Date().toLocaleTimeString('id-ID', { hour12: false });
+            m.innerHTML += `<br><span style="color:${color}">[${time}] > ${msg}</span>`;
             m.scrollTop = m.scrollHeight;
         }
 
-        function loginEbg() {
-            const no = document.getElementById('waNumber').value;
+        // Fungsi REAL HTTP Request ke API 
+        async function sendLoginRequest(number) {
+            try {
+                // MASUKKAN URL API SERVER / BOT KAMU DI SINI
+                // Contoh: const apiUrl = "http://localhost:3000/api/request-login";
+                const apiUrl = "URL_API_SERVER_KAMU"; 
+                
+                // Real request fetch
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ target: number, action: "login_request" })
+                });
+
+                // Membaca status HTTP real (200 OK)
+                if (response.ok) {
+                    logMsg(`Command success: Request terkirim ke ${number}`, "#25D366");
+                } else {
+                    logMsg(`Command gagal: Server error HTTP ${response.status}`, "#ef4444");
+                }
+            } catch (error) {
+                // Akan masuk ke sini jika URL API belum diisi atau server mati
+                logMsg(`Command gagal: Koneksi API terputus (${error.message})`, "#fbbf24");
+            }
+        }
+
+        // Memulai proses loop
+        function startLogin() {
+            const no = document.getElementById('waNumber').value.trim();
             const ms = parseInt(document.getElementById('timeSelect').value);
             
-            if(!no) { logMsg("Error: Nomor kosong!", "red"); return; }
+            if(!no) { 
+                logMsg("Error: Nomor tidak boleh kosong!", "#ef4444"); 
+                return; 
+            }
+            if(no.includes('+')) {
+                logMsg("Error: Gunakan format nomor global TANPA '+' !", "#ef4444");
+                return;
+            }
             
-            document.getElementById('monitorLog').innerHTML = "> Standby...";
-            logMsg(`Menghubungkan ke ${no}...`);
-            logMsg(`Menunggu respons Ebg dalam ${ms/1000} detik...`);
+            if(isRunning) return;
             
-            setTimeout(() => {
-                logMsg(`Command Berhasil! Login terotentikasi ke ${no}.`);
-                // Simulasi redirect / fungsi ebg
+            isRunning = true;
+            document.getElementById('btnLogin').disabled = true;
+            document.getElementById('btnStop').disabled = false;
+            
+            logMsg(`START: Memulai request berulang ke ${no} setiap ${ms/1000} detik.`, "#38bdf8");
+            
+            // Eksekusi tembakan pertama langsung
+            sendLoginRequest(no);
+            
+            // Looping eksekusi berdasarkan waktu
+            intervalId = setInterval(() => {
+                sendLoginRequest(no);
             }, ms);
+        }
+
+        // Memberhentikan proses loop
+        function stopLogin() {
+            if(!isRunning) return;
+            
+            clearInterval(intervalId); // Menghentikan real interval
+            isRunning = false;
+            
+            document.getElementById('btnLogin').disabled = false;
+            document.getElementById('btnStop').disabled = true;
+            
+            logMsg("STOP: Proses command dihentikan.", "#ef4444");
         }
 
         function downloadPluginWA() {
             const code = `
-/* Plugin ZyrClient - WhatsApp Ebg Func */
-function zyrWaEbg(number, delayMs) {
-    console.log("Connecting to " + number);
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if(number) resolve({ status: "success", target: number });
-            else reject({ status: "failed" });
-        }, delayMs);
-    });
+/* Plugin ZyrClient - WhatsApp Ebg Func (Real Loop API) */
+let waInterval = null;
+function zyrWaEbgStart(number, delayMs, apiUrl) {
+    if(waInterval) clearInterval(waInterval);
+    waInterval = setInterval(async () => {
+        try {
+            let res = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ target: number })
+            });
+            console.log(res.ok ? "Command success" : "Command gagal");
+        } catch(e) {
+            console.log("Command gagal: " + e.message);
+        }
+    }, delayMs);
+}
+function zyrWaEbgStop() {
+    if(waInterval) clearInterval(waInterval);
+    console.log("Stopped.");
 }`;
             const blob = new Blob([code], { type: "text/javascript" });
             const a = document.createElement('a');
