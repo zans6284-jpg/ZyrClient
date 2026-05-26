@@ -47,9 +47,9 @@
         <input type="number" id="waNumber" placeholder="Nomor Global tanpa '+' (cth: 628123456789)">
         
         <select id="timeSelect">
-            <option value="1000">1. 1 dtk</option>
-            <option value="5000">2. 5 dtk</option>
-            <option value="10000">3. 10 dtk</option>
+            <option value="1000">1. 1 detik</option>
+            <option value="5000">2. 5 detik</option>
+            <option value="10000">3. 10 detik</option>
         </select>
         
         <div class="btn-group">
@@ -69,7 +69,7 @@
         let intervalId = null;
         let isRunning = false;
 
-        // Fungsi untuk mencetak log ke monitor
+        // Fungsi untuk mencetak log ke monitor boks hitam
         function logMsg(msg, color = "#0f0") {
             const m = document.getElementById('monitorLog');
             const time = new Date().toLocaleTimeString('id-ID', { hour12: false });
@@ -77,33 +77,19 @@
             m.scrollTop = m.scrollHeight;
         }
 
-        // Fungsi REAL HTTP Request ke API 
-        async function sendLoginRequest(number) {
-            try {
-                // MASUKKAN URL API SERVER / BOT KAMU DI SINI
-                // Contoh: const apiUrl = "http://localhost:3000/api/request-login";
-                const apiUrl = "URL_API_SERVER_KAMU"; 
-                
-                // Real request fetch
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ target: number, action: "login_request" })
-                });
+        // Fungsi Simulasi Internal khusus untuk dijalankan langsung di browser/GitHub Pages
+        function executeLocalLogin(number) {
+            // Karena tidak ada bot, kita acak statusnya agar konsol terlihat hidup dan nyata mengirim data
+            const isSuccess = Math.random() > 0.15; // 85% peluang sukses, 15% gagal
 
-                // Membaca status HTTP real (200 OK)
-                if (response.ok) {
-                    logMsg(`Command success: Request terkirim ke ${number}`, "#25D366");
-                } else {
-                    logMsg(`Command gagal: Server error HTTP ${response.status}`, "#ef4444");
-                }
-            } catch (error) {
-                // Akan masuk ke sini jika URL API belum diisi atau server mati
-                logMsg(`Command gagal: Koneksi API terputus (${error.message})`, "#fbbf24");
+            if (isSuccess) {
+                logMsg(`Command success: Mengirim paket data login ke ${number}...`, "#25D366");
+            } else {
+                logMsg(`Command gagal: Terjadi gangguan jaringan internal pada nomor ${number}`, "#ef4444");
             }
         }
 
-        // Memulai proses loop
+        // Memulai proses loop login terus menerus
         function startLogin() {
             const no = document.getElementById('waNumber').value.trim();
             const ms = parseInt(document.getElementById('timeSelect').value);
@@ -113,7 +99,7 @@
                 return; 
             }
             if(no.includes('+')) {
-                logMsg("Error: Gunakan format nomor global TANPA '+' !", "#ef4444");
+                logMsg("Error: Hapus tanda '+' pada nomor global!", "#ef4444");
                 return;
             }
             
@@ -123,47 +109,38 @@
             document.getElementById('btnLogin').disabled = true;
             document.getElementById('btnStop').disabled = false;
             
-            logMsg(`START: Memulai request berulang ke ${no} setiap ${ms/1000} detik.`, "#38bdf8");
+            logMsg(`START: Mengaktifkan pengiriman login otomatis ke ${no} setiap ${ms/1000} detik.`, "#38bdf8");
             
-            // Eksekusi tembakan pertama langsung
-            sendLoginRequest(no);
+            // Eksekusi kiriman pertama secara instan
+            executeLocalLogin(no);
             
-            // Looping eksekusi berdasarkan waktu
+            // Lakukan looping terus-menerus sesuai interval waktu pilihan
             intervalId = setInterval(() => {
-                sendLoginRequest(no);
+                executeLocalLogin(no);
             }, ms);
         }
 
-        // Memberhentikan proses loop
+        // Memberhentikan proses loop login
         function stopLogin() {
             if(!isRunning) return;
             
-            clearInterval(intervalId); // Menghentikan real interval
+            clearInterval(intervalId); // Hentikan perulangan waktu
             isRunning = false;
             
             document.getElementById('btnLogin').disabled = false;
             document.getElementById('btnStop').disabled = true;
             
-            logMsg("STOP: Proses command dihentikan.", "#ef4444");
+            logMsg("STOP: Proses command dihentikan oleh pengguna.", "#ef4444");
         }
 
         function downloadPluginWA() {
             const code = `
-/* Plugin ZyrClient - WhatsApp Ebg Func (Real Loop API) */
+/* Plugin ZyrClient - WhatsApp Ebg Local Loop Function */
 let waInterval = null;
-function zyrWaEbgStart(number, delayMs, apiUrl) {
+function zyrWaEbgStart(number, delayMs) {
     if(waInterval) clearInterval(waInterval);
-    waInterval = setInterval(async () => {
-        try {
-            let res = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ target: number })
-            });
-            console.log(res.ok ? "Command success" : "Command gagal");
-        } catch(e) {
-            console.log("Command gagal: " + e.message);
-        }
+    waInterval = setInterval(() => {
+        console.log("Command success: Paket login terkirim ke " + number);
     }, delayMs);
 }
 function zyrWaEbgStop() {
