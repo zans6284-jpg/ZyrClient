@@ -10,172 +10,137 @@
         body { background: var(--bg); background-size: 400% 400%; animation: wave 15s ease infinite; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
         @keyframes wave { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
         
-        .container { width: 100%; max-width: 700px; background: var(--panel); border: 1px solid rgba(59,130,246,0.5); border-radius: 20px; padding: 30px; text-align: center; backdrop-filter: blur(10px);}
-        h1 { color: #3b82f6; margin-bottom: 5px; font-family: sans-serif; }
-        h2 { font-size: 1.2rem; color: #cbd5e1; margin-bottom: 20px; font-family: sans-serif; }
+        .container { width: 100%; max-width: 700px; background: var(--panel); border: 1px solid rgba(59,130,246,0.5); border-radius: 20px; padding: 30px; text-align: center; backdrop-filter: blur(10px); }
+        h1 { color: #3b82f6; margin-bottom: 20px; font-family: sans-serif; }
         
         .img-box { width: 100%; height: 150px; background: #000; border-radius: 12px; margin-bottom: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center;}
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
         input, select { width: 100%; padding: 15px; background: rgba(0,0,0,0.4); border-radius: 12px; border: 2px solid #3b82f6; margin-bottom: 15px; font-size: 1rem; outline: none; }
+        input:focus { border-color: var(--magenta); }
         
-        .btn-group { display: flex; gap: 15px; margin-bottom: 10px; }
-        button { flex: 1; padding: 15px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: sans-serif; }
-        
+        button { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: sans-serif; margin-bottom: 15px; }
         #btnLogin { background: linear-gradient(90deg, #25D366, #128C7E); }
-        #btnLogin:hover:not(:disabled) { box-shadow: 0 5px 15px rgba(37,211,102,0.4); transform: translateY(-2px); }
-        #btnLogin:disabled { background: #64748b; cursor: not-allowed; }
+        #btnUpload { background: linear-gradient(90deg, #3b82f6, var(--magenta)); }
+        button:hover { transform: translateY(-2px); filter: brightness(1.2); }
         
-        #btnStop { background: linear-gradient(90deg, #ef4444, #b91c1c); }
-        #btnStop:hover:not(:disabled) { box-shadow: 0 5px 15px rgba(239,68,68,0.4); transform: translateY(-2px); }
-        #btnStop:disabled { background: #64748b; cursor: not-allowed; }
+        .display-box { width: 100%; padding: 15px; border-radius: 12px; background: #000; border: 1px solid #333; text-align: left; margin-bottom: 15px; font-size: 1rem; }
+        .pairing-card { text-align: center; font-size: 2rem; font-weight: bold; color: #fbbf24; letter-spacing: 5px; background: rgba(251,191,36,0.1); border: 2px dashed #fbbf24; }
         
-        .plugin-btn { background: #1e3a8a; width: 100%; margin-top: 10px; }
-        
-        .monitor { background: #000; border: 1px solid #333; border-radius: 10px; padding: 15px; text-align: left; height: 200px; overflow-y: auto; color: #0f0; margin-bottom: 15px; font-size: 0.9rem; font-family: monospace; }
+        .section-title { font-size: 1rem; text-align: left; margin-bottom: 5px; color: #cbd5e1; font-weight: bold; }
     </style>
 </head>
 <body>
+
     <h1>ZyrClient</h1>
-    <h2>WhatsApp Ebg</h2>
     
     <div class="container">
         <div class="img-box">
             <img src="Wbg.png" alt="Wbg Logo" onerror="this.src='https://via.placeholder.com/600x150/128C7E/FFFFFF?text=Wbg.png';">
         </div>
         
-        <input type="number" id="waNumber" placeholder="Nomor Global tanpa '+' (cth: 628123456789)">
+        <div class="section-title">Nomor WhatsApp Global:</div>
+        <input type="number" id="waNumber" placeholder="Contoh: 628123456789 (Tanpa '+')">
         
-        <select id="timeSelect">
-            <option value="1000">1. 1 detik</option>
-            <option value="5000">2. 5 detik</option>
-            <option value="10000">3. 10 detik</option>
-        </select>
+        <button id="btnLogin" onclick="requestPairingCode()">Login & Dapatkan Pairing Code</button>
         
-        <div class="btn-group">
-            <button id="btnLogin" onclick="startLogin()">Login</button>
-            <button id="btnStop" onclick="stopLogin()" disabled>Stop</button>
-        </div>
+        <div class="section-title">Pairing Code Kamu:</div>
+        <div class="display-box pairing-card" id="pairingCodeDisplay">- - - - - - - -</div>
         
-        <div class="monitor" id="monitorLog">
-            > Standby console...
-        </div>
+        <div class="section-title">Status Koneksi:</div>
+        <div class="display-box" id="statusDisplay" style="color: #ef4444; font-weight: bold;">DISCONNECTED</div>
         
-        <button class="plugin-btn" onclick="downloadPluginWA()">Download Plugin</button>
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 25px 0;">
+        
+        <div class="section-title">Pilih File Foto / Video untuk Story (Status WA):</div>
+        <input type="file" id="storyFile" accept="image/*, video/*">
+        
+        <button id="btnUpload" onclick="uploadToStory()">Upload ke Story WA</button>
     </div>
-    <a href="index.html" style="display:block; margin-top:20px; color:#cbd5e1; font-family:sans-serif; text-decoration:none;">Kembali</a>
+
+    <a href="index.html" style="display:block; margin-top:20px; color:#cbd5e1; text-decoration:none;">&larr; Kembali ke Utama</a>
 
     <script>
-        let intervalId = null;
-        let isRunning = false;
+        // GANTI LINK DI BAWAH INI DENGAN URL TUNNEL PINGGY/NGROK DARI UBUNTU KAMU
+        const BACKEND_URL = "https://zyvib-140-213-158-138.run.pinggy-free.link";
 
-        // Taruh URL https:// yang kamu dapatkan da:
-        const URL_TUNNEL_TERMUX = "https://oufdu-112-215-200-88.run.pinggy-free.link";
+        async function requestPairingCode() {
+            const number = document.getElementById('waNumber').value.trim();
+            const btn = document.getElementById('btnLogin');
+            const codeBox = document.getElementById('pairingCodeDisplay');
+            const statusBox = document.getElementById('statusDisplay');
+            
+            if(!number) return alert("Masukkan nomor WhatsApp terlebih dahulu!");
+            if(number.includes('+')) return alert("Jangan gunakan tanda '+' !");
 
-        // Fungsi mencetak log pesan ke boks hitam monitor
-        function logMsg(msg, color = "#0f0") {
-            const m = document.getElementById('monitorLog');
-            const time = new Date().toLocaleTimeString('id-ID', { hour12: false });
-            m.innerHTML += `<br><span style="color:${color}">[${time}] > ${msg}</span>`;
-            m.scrollTop = m.scrollHeight;
-        }
+            btn.innerText = "Memproses...";
+            codeBox.innerText = "LOADING...";
+            statusBox.innerText = "CONNECTING TO SERVER...";
+            statusBox.style.color = "#fbbf24";
 
-        // Fungsi REAL HTTP Request mengirim data nomor ke Server Termux
-        async function sendLoginToServer(number) {
             try {
-                const response = await fetch(`${URL_TUNNEL_TERMUX}/api/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ target: number })
-                });
+                const response = await fetch(`${BACKEND_URL}/api/connect?number=${number}`);
+                const data = await response.json();
 
-                const result = await response.json();
-
-                if (response.ok && result.status === 'success') {
-                    // Menampilkan pesan sukses dari respons server Node.js Termux
-                    logMsg(`Command success: ${result.message}`, "#25D366");
+                if(data.status === "pairing") {
+                    codeBox.innerText = data.code;
+                    statusBox.innerText = "MASUKKAN KODE DI NOTIFIKASI WA KAMU!";
+                    statusBox.style.color = "#fbbf24";
+                } else if(data.status === "connected") {
+                    codeBox.innerText = "CONNECTED";
+                    statusBox.innerText = "CONNECTED (Sudah Terhubung)";
+                    statusBox.style.color = "#25D366";
                 } else {
-                    logMsg(`Command gagal: ${result.message || 'Server menolak koneksi'}`, "#ef4444");
+                    throw new Error(data.message);
                 }
             } catch (error) {
-                // Terjadi apabila url salah, server mati, atau kendala jaringan internet
-                logMsg(`Command gagal: Hubungan ke Termux Terputus (${error.message})`, "#ef4444");
+                codeBox.innerText = "ERROR";
+                statusBox.innerText = "GAGAL TERHUBUNG: " + error.message;
+                statusBox.style.color = "#ef4444";
             }
+            btn.innerText = "Login & Dapatkan Pairing Code";
         }
 
-        // Fungsi memicu loop pengiriman terus-menerus
-        function startLogin() {
-            const no = document.getElementById('waNumber').value.trim();
-            const ms = parseInt(document.getElementById('timeSelect').value);
-            
-            if(!no) { 
-                logMsg("Error: Nomor tidak boleh kosong!", "#ef4444"); 
-                return; 
-            }
-            if(no.includes('+')) {
-                logMsg("Error: Masukkan nomor tanpa karakter '+' !", "#ef4444");
-                return;
-            }
-            
-            if(isRunning) return;
-            
-            isRunning = true;
-            document.getElementById('btnLogin').disabled = true;
-            document.getElementById('btnStop').disabled = false;
-            
-            logMsg(`START: Menghubungkan ke server Termux. Mengirim loop login ke ${no} tiap ${ms/1000} dtk.`, "#38bdf8");
-            
-            // Tembakan data pertama secara instan
-            sendLoginToServer(no);
-            
-            // Melakukan looping otomatis konstan berdasarkan tabel pilihan waktu
-            intervalId = setInterval(() => {
-                sendLoginToServer(no);
-            }, ms);
-        }
+        async function uploadToStory() {
+            const fileInput = document.getElementById('storyFile');
+            const file = fileInput.files[0];
+            const btn = document.getElementById('btnUpload');
 
-        // Fungsi menghentikan siklus looping
-        function stopLogin() {
-            if(!isRunning) return;
-            
-            clearInterval(intervalId); // Mematikan interval proses
-            isRunning = false;
-            
-            document.getElementById('btnLogin').disabled = false;
-            document.getElementById('btnStop').disabled = true;
-            
-            logMsg("STOP: Proses sinkronisasi login dihentikan.", "#fbbf24");
-        }
+            if(!file) return alert("Pilih file foto atau video terlebih dahulu!");
 
-        function downloadPluginWA() {
-            const code = `
-/* Plugin ZyrClient - WhatsApp Ebg (Real Loop Termux Backend Integration) */
-let waInterval = null;
-function zyrWaEbgStart(number, delayMs, serverUrl) {
-    if(waInterval) clearInterval(waInterval);
-    waInterval = setInterval(async () => {
-        try {
-            let res = await fetch(serverUrl + '/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ target: number })
-            });
-            let data = await res.json();
-            console.log(data.status === "success" ? "Command success" : "Command gagal");
-        } catch(e) {
-            console.log("Command gagal: " + e.message);
-        }
-    }, delayMs);
-}
-function zyrWaEbgStop() {
-    if(waInterval) clearInterval(waInterval);
-    console.log("Stopped.");
-}`;
-            const blob = new Blob([code], { type: "text/javascript" });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = "ZyrWaEbgPlugin.js";
-            a.click();
+            btn.innerText = "Mengupload...";
+            btn.disabled = true;
+
+            // Membaca file menjadi Base64 string agar bisa dikirim via JSON API
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64Data = reader.result;
+                const fileType = file.type.startsWith('image/') ? 'image' : 'video';
+
+                try {
+                    const response = await fetch(`${BACKEND_URL}/api/upload-story`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            media: base64Data,
+                            type: fileType
+                        })
+                    });
+                    const resData = await response.json();
+
+                    if(response.ok && resData.status === "success") {
+                        alert("Berhasil! Berhasil mengupload file ke Story/Status WhatsApp.");
+                    } else {
+                        alert("Gagal upload: " + resData.message);
+                    }
+                } catch (error) {
+                    alert("Error saat upload ke server: " + error.message);
+                } finally {
+                    btn.innerText = "Upload ke Story WA";
+                    btn.disabled = false;
+                }
+            };
         }
     </script>
 </body>
