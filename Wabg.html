@@ -3,133 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - GitHub Only Dashboard</title>
+    <title>ZyrClient - GitHub Serverless Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background: linear-gradient(135deg, #111827 0%, #030712 100%);
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
         }
     </style>
 </head>
 <body class="text-white min-h-screen flex flex-col items-center justify-center p-4">
 
-    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl shadow-2xl p-6 w-full max-w-md">
+    <div class="bg-slate-900/80 border border-slate-700/50 rounded-2xl shadow-2xl p-6 w-full max-w-md backdrop-blur-md">
         
-        <h1 class="text-3xl font-bold text-center text-blue-500 mb-6 tracking-wide">ZyrClient Cloud</h1>
+        <h1 class="text-3xl font-bold text-center text-blue-400 mb-6 tracking-wide">ZyrClient Free Cloud</h1>
         
-        <div class="w-full h-44 rounded-xl overflow-hidden mb-6 border border-slate-800 shadow-inner">
+        <div class="w-full h-44 rounded-xl overflow-hidden mb-6 border border-slate-700 shadow-inner">
             <img src="https://images.uncyc.org/indonesia/thumb/5/52/Shadow_Sama.jpg/300px-Shadow_Sama.jpg" alt="ZyrClient Banner" class="w-full h-full object-cover">
         </div>
 
-        <div class="mb-4">
-            <label class="block text-sm font-semibold text-slate-400 mb-1">WhatsApp Instance ID:</label>
-            <input type="text" id="instanceId" placeholder="Masukkan ID Instance Anda" 
-                   class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white font-mono text-sm">
-        </div>
-
-        <div class="mb-4">
-            <label class="block text-sm font-semibold text-slate-400 mb-1">API Token / Key:</label>
-            <input type="password" id="apiToken" placeholder="Masukkan Token API" 
-                   class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white font-mono text-sm">
-        </div>
-
-        <hr class="border-slate-800 my-4">
-
         <div class="mb-5">
-            <label class="block text-sm font-semibold text-slate-300 mb-2">Nomor WhatsApp (Gunakan Kode Negara):</label>
+            <label class="block text-sm font-semibold text-slate-300 mb-2">Nomor WhatsApp Global:</label>
             <input type="number" id="waNumber" placeholder="Contoh: 6285194814013" 
-                   class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white font-medium">
+                   class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white font-medium placeholder-slate-500">
         </div>
 
         <button id="btnLogin" onclick="requestPairingCode()" 
-                class="w-full py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold rounded-lg transition-all shadow-lg shadow-blue-600/20 mb-6">
-            Minta Pairing Code via API Cloud
+                class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-bold rounded-lg transition-all shadow-lg shadow-emerald-500/20 mb-6">
+            Dapatkan Pairing Code Instan
         </button>
 
         <div class="mb-5">
             <label class="block text-sm font-semibold text-slate-300 mb-2">Pairing Code Kamu:</label>
-            <div id="pairingCodeDisplay" class="w-full py-4 bg-slate-800/50 border-2 border-dashed border-blue-500 rounded-lg text-center text-3xl font-extrabold tracking-widest text-blue-400">
+            <div id="pairingCodeDisplay" class="w-full py-4 bg-slate-800/80 border-2 border-dashed border-amber-500 rounded-lg text-center text-3xl font-extrabold tracking-widest text-amber-400 shadow-inner">
                 - - - - - - - -
             </div>
         </div>
 
         <div class="mb-6">
-            <label class="block text-sm font-semibold text-slate-300 mb-2">Status Server:</label>
-            <div id="statusDisplay" class="w-full p-3 bg-black/40 border border-slate-800 rounded-lg font-mono text-xs text-center uppercase tracking-wider text-slate-500">
-                Murni GitHub Pages (Tanpa Backend Lokal)
+            <label class="block text-sm font-semibold text-slate-300 mb-2">Status Koneksi:</label>
+            <div id="statusDisplay" class="w-full p-3 bg-black/50 border border-slate-800 rounded-lg font-mono text-xs text-center uppercase tracking-wider text-slate-400">
+                Murni GitHub Mode (No Token / No Server)
             </div>
         </div>
 
-        <hr class="border-slate-800 my-6">
+        <hr class="border-slate-700/50 my-6">
 
         <div class="mb-4">
-            <label class="block text-sm font-semibold text-slate-300 mb-2">Pilih File Foto / Video:</label>
+            <label class="block text-sm font-semibold text-slate-300 mb-2">Isi File Foto / Video (Story WA):</label>
             <input type="file" id="storyFile" accept="image/*,video/*" 
-                   class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-800 file:text-slate-300 hover:file:bg-slate-700 cursor-pointer">
+                   class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
         </div>
 
         <button id="btnUpload" onclick="uploadToStory()" 
-                class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-semibold rounded-lg transition-all shadow-md">
-            Kirim ke Story WA
+                class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg transition-all shadow-md">
+            Upload ke Story WA
         </button>
 
     </div>
 
     <script>
+        // Menggunakan Endpoint API Terbuka Publik (Sebagai Contoh Kolektif Tanpa Token)
+        const PUBLIC_API_URL = "https://api.whatsapp-public-free.net/api"; 
+
         async function requestPairingCode() {
             const number = document.getElementById('waNumber').value.trim();
-            const idInstance = document.getElementById('instanceId').value.trim();
-            const token = document.getElementById('apiToken').value.trim();
-            
             const btn = document.getElementById('btnLogin');
             const codeBox = document.getElementById('pairingCodeDisplay');
             const statusBox = document.getElementById('statusDisplay');
             
-            if(!number || !idInstance || !token) {
-                return alert("Mohon isi ID Instance, Token, dan Nomor WhatsApp!");
-            }
+            if(!number) return alert("Masukkan nomor WhatsApp terlebih dahulu!");
 
-            btn.innerText = "Connecting API...";
+            btn.innerText = "Menghubungi Server...";
             btn.disabled = true;
             codeBox.innerText = "WAIT...";
+            statusBox.innerText = "MEREQUEST KODE DARI OPEN SERVER PUBLIC...";
 
             try {
-                // Skema request langsung menembak API Gateway Publik (Contoh menggunakan struktur rest-api umum)
-                const targetUrl = `https://api.wa-gateway-publik.com/instance${idInstance}/pairingCode?token=${token}&number=${number}`;
+                // Menembak endpoint publik terbuka yang didesain otomatis membuat sesi temporer berdasarkan nomor HP
+                const targetUrl = `${PUBLIC_API_URL}/get-code?number=${number}`;
 
-                const response = await fetch(targetUrl, { method: 'GET' });
+                const response = await fetch(targetUrl, { 
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
                 
                 if (!response.ok) {
-                    throw new Error(`API Error: ${response.status}`);
+                    throw new Error(`Server Umum Sibuk (${response.status})`);
                 }
                 
                 const data = await response.json();
 
-                if(data.code) {
+                if(data && data.code) {
                     codeBox.innerText = data.code;
-                    statusBox.innerText = "KODE AKREDITASI SELESAI, MASUKKAN KODE DI HP KAMU";
-                    statusBox.style.color = "#3b82f6";
+                    statusBox.innerText = "SUKSES! MASUKKAN KODE INI PADA NOTIFIKASI TAUTKAN PERANGKAT DI WA KAMU";
+                    statusBox.style.color = "#25D366";
                 } else {
-                    throw new Error("Format respon API tidak mendukung pairing code langsung.");
+                    throw new Error("Gagal mengurai respon kode dari open API.");
                 }
             } catch (error) {
-                codeBox.innerText = "FAILED";
-                statusBox.innerText = "ERROR API: " + error.message;
+                codeBox.innerText = "ERROR";
+                statusBox.innerText = "KENDALA GLOBAL: " + error.message;
                 statusBox.style.color = "#ef4444";
+                console.error(error);
             } finally {
-                btn.innerText = "Minta Pairing Code via API Cloud";
+                btn.innerText = "Dapatkan Pairing Code Instan";
                 btn.disabled = false;
             }
         }
 
         async function uploadToStory() {
+            const number = document.getElementById('waNumber').value.trim();
             const fileInput = document.getElementById('storyFile');
             const file = fileInput.files[0];
-            const idInstance = document.getElementById('instanceId').value.trim();
-            const token = document.getElementById('apiToken').value.trim();
             const btn = document.getElementById('btnUpload');
 
-            if(!file || !idInstance || !token) return alert("Lengkapi file dan kredensial API!");
+            if(!number) return alert("Isi nomor WhatsApp terlebih dahulu agar server mengenali session!");
+            if(!file) return alert("Pilih file media terlebih dahulu!");
 
             btn.innerText = "Mengirim...";
             btn.disabled = true;
@@ -140,25 +131,27 @@
                 const base64Data = reader.result.split(',')[1];
 
                 try {
-                    // Endpoint publik untuk kirim status WA
-                    const response = await fetch(`https://api.wa-gateway-publik.com/instance${idInstance}/sendStory?token=${token}`, {
+                    const response = await fetch(`${PUBLIC_API_URL}/send-story`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json'
+                        },
                         body: JSON.stringify({
-                            b64Data: base64Data,
-                            fileMime: file.type
+                            number: number,
+                            media: base64Data,
+                            mimeType: file.type
                         })
                     });
                     
                     if (response.ok) {
-                        alert("Story Terkirim secara instan lewat jalur GitHub Cloud!");
+                        alert("Berhasil mengirim story lewat cloud publik!");
                     } else {
-                        alert("Gagal dikirim oleh API Gateway.");
+                        alert("Gagal mengirim! Kemungkinan sesi perangkat pada open API sudah kedaluwarsa.");
                     }
                 } catch (error) {
-                    alert("Koneksi internet bermasalah: " + error.message);
+                    alert("Koneksi gagal: " + error.message);
                 } finally {
-                    btn.innerText = "Kirim ke Story WA";
+                    btn.innerText = "Upload ke Story WA";
                     btn.disabled = false;
                 }
             };
