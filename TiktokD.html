@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZyrClient - TikTok Downloader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b, #4c1d95);
+            --primary-blue: #2563eb;
+            --light-blue: #3b82f6;
+            --dark-blue: #1d4ed8; /* Biru tua tidak terlalu tua */
+            --panel-bg: #1e3a8a; /* UI Biru Tua pas */
+            --magenta: #d946ef;
+            --text-light: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientWave 15s ease infinite;
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes gradientWave {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .title-top {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #3b82f6, #d946ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        /* Main Downloader Card */
+        .downloader-card {
+            background: var(--panel-bg);
+            width: 100%;
+            max-width: 550px;
+            padding: 30px;
+            border-radius: 24px; /* Ujung bulat */
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            text-align: center;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .brand-section i {
+            font-size: 2rem;
+            color: var(--text-light);
+        }
+
+        .brand-section h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        /* Input Form */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 2px solid var(--light-blue);
+            background: rgba(15, 23, 42, 0.6);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--magenta);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(to right, var(--primary-blue), var(--dark-blue));
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        button:hover {
+            background: linear-gradient(to right, var(--light-blue), var(--magenta));
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #64748b;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Info Panel (infotd) */
+        .infotd {
+            display: none; /* Tersembunyi di awal */
+            margin-top: 30px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(217, 70, 239, 0.2);
+            text-align: left;
+        }
+
+        .video-preview {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            max-height: 400px;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .username {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--magenta);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Grid Statistik */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .stat-item {
+            background: rgba(30, 58, 138, 0.7);
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .stat-item i {
+            font-size: 1.1rem;
+        }
+
+        .fa-heart { color: #ef4444; }
+        .fa-comment { color: #38bdf8; }
+        .fa-star { color: #fbbf24; }
+        .fa-eye { color: #34d399; }
+
+        .caption {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #cbd5e1;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 12px;
+        }
+
+        .back-btn {
+            margin-top: 25px;
+            display: inline-block;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .back-btn:hover { color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="title-top">ZyrClient</div>
+
+    <div class="downloader-card">
+        <div class="brand-section">
+            <i class="fab fa-tiktok"></i>
+            <h2>TikTok Downloader</h2>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="tiktokUrl" placeholder="Masukkan link Video TikTok di sini...">
+            <button id="downloadBtn" onclick="handleDownload()">Download</button>
+        </div>
+
+        <div class="infotd" id="infoPanel">
+            <video class="video-preview" id="videoPlayer" controls></video>
+            
+            <div class="username">
+                <i class="fas fa-user-circle"></i> <span id="authorName">Username</span>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <i class="fas fa-heart"></i>
+                    <span>Like: <strong id="likeCount">0</strong></span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-comment"></i>
+                    <span>Komentar: <strong id="commentCount">0</strong></span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-star"></i>
+                    <span>Favorit: <strong id="favoriteCount">0</strong></span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-eye"></i>
+                    <span>Views: <strong id="viewCount">0</strong></span>
+                </div>
+            </div>
+
+            <div class="caption">
+                <strong>Caption:</strong>
+                <p id="videoCaption">Isi caption dari video...</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a>
+
+    <script>
+        async function handleDownload() {
+            const urlInput = document.getElementById('tiktokUrl').value.trim();
+            const downloadBtn = document.getElementById('downloadBtn');
+            const infoPanel = document.getElementById('infoPanel');
+
+            if (!urlInput) {
+                alert('Silakan masukkan link TikTok terlebih dahulu!');
+                return;
+            }
+
+            // Ubah text tombol saat loading
+            downloadBtn.disabled = true;
+            downloadBtn.innerText = 'Memproses...';
+
+            try {
+                // Menggunakan API publik Tikwm (Gratis, tanpa token, stabil untuk data parsing)
+                const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(urlInput)}`;
+                
+                const response = await fetch(apiUrl);
+                const result = await response.json();
+
+                if (result.code === 0 && result.data) {
+                    const data = result.data;
+
+                    // 1. Masukkan Video Source ke Player
+                    const videoPlayer = document.getElementById('videoPlayer');
+                    videoPlayer.src = data.play; // Link video tanpa watermark
+
+                    // 2. Set Username / Nickname penulis
+                    document.getElementById('authorName').innerText = `@${data.author.unique_id} (${data.author.nickname})`;
+
+                    // 3. Set Statistik Data (Format Angka jika besar)
+                    document.getElementById('likeCount').innerText = data.digg_count.toLocaleString('id-ID');
+                    document.getElementById('commentCount').innerText = data.comment_count.toLocaleString('id-ID');
+                    document.getElementById('favoriteCount').innerText = data.collect_count.toLocaleString('id-ID');
+                    document.getElementById('viewCount').innerText = data.play_count.toLocaleString('id-ID');
+
+                    // 4. Set Caption
+                    document.getElementById('videoCaption').innerText = data.title || 'Tidak ada caption.';
+
+                    // Tampilkan table panel infotd setelah data berhasil masuk
+                    infoPanel.style.display = 'block';
+                } else {
+                    alert('Gagal mengambil data video. Pastikan tautan TikTok valid dan publik.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Terjadi kesalahan koneksi saat menghubungi server API.');
+            } finally {
+                // Kembalikan status tombol download
+                downloadBtn.disabled = false;
+                downloadBtn.innerText = 'Download';
+            }
+        }
+    </script>
+</body>
+</html>
