@@ -3,351 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - TikTok Downloader</title>
+    <title>ZyrClient - TikTok</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #0b0f19, #1e1b4b, #1e3a8a);
-            --primary-blue: #3b82f6;
-            --dark-blue: #1d4ed8;
-            --panel-bg: #1e3a8a;
-            --magenta: #d946ef;
-            --text-light: #f8fafc;
-        }
-
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-
-        body {
-            background: var(--bg-gradient);
-            background-size: 400% 400%;
-            animation: gradientWave 12s ease infinite;
-            color: var(--text-light);
-            min-height: 100vh;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        @keyframes gradientWave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .title-top {
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(to right, var(--primary-blue), var(--magenta));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
-        }
-
-        .main-card {
-            background: var(--panel-bg);
-            width: 100%;
-            max-width: 750px; /* Lebar optimal pas sesuai request */
-            padding: 35px;
-            border-radius: 20px;
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
-
-        .brand-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .brand-header i { font-size: 2.5rem; }
-        .brand-header h2 { font-size: 1.8rem; font-weight: 700; }
-
-        .input-box {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 16px 20px;
-            border-radius: 12px;
-            border: 2px solid var(--primary-blue);
-            background: rgba(11, 15, 25, 0.7);
-            color: white;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        input[type="text"]:focus { border-color: var(--magenta); }
-
-        .btn-take {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(to right, var(--primary-blue), var(--dark-blue));
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-take:hover {
-            background: linear-gradient(to right, var(--primary-blue), var(--magenta));
-            transform: translateY(-2px);
-        }
-
-        /* Infotd Panel */
-        .infotd {
-            display: none;
-            margin-top: 30px;
-            background: rgba(11, 15, 25, 0.6);
-            border-radius: 16px;
-            padding: 25px;
-            border: 1px solid rgba(217, 70, 239, 0.3);
-        }
-
-        .video-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        video {
-            width: 100%;
-            max-width: 400px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-        }
-
-        .username {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--magenta);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .stat-box {
-            background: rgba(30, 58, 138, 0.6);
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .stat-box i { font-size: 1.1rem; }
-        .fa-heart { color: #ff4757; }
-        .fa-comment { color: #1e90ff; }
-        .fa-star { color: #ffa500; }
-        .fa-share { color: #2ed573; }
-        .fa-eye { color: #a55eea; }
-
-        .caption-box {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .btn-action {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            color: white;
-            transition: 0.3s;
-        }
-
-        .btn-download { background: #2ed573; }
-        .btn-download:hover { background: #26af5f; }
-        .btn-plugin { background: #ffa500; }
-        .btn-plugin:hover { background: #e09200; }
-
-        .back-link {
-            margin-top: 25px;
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 0.95rem;
-        }
-        .back-link:hover { color: white; }
+        :root { --bg: linear-gradient(135deg, #0f172a, #1e3a8a, #4c1d95, #2563eb); --panel: rgba(30, 58, 138, 0.7); --magenta: #d946ef; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; color: white; }
+        body { background: var(--bg); background-size: 400% 400%; animation: wave 15s ease infinite; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+        @keyframes wave { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        
+        .container { width: 100%; max-width: 700px; background: var(--panel); border: 1px solid rgba(59,130,246,0.5); border-radius: 20px; padding: 30px; backdrop-filter: blur(10px); }
+        h1 { text-align: center; margin-bottom: 5px; color: #3b82f6; }
+        .header-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 30px; font-size: 1.5rem; }
+        
+        input { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #3b82f6; background: rgba(0,0,0,0.3); margin-bottom: 15px; font-size: 1rem; outline: none; }
+        input:focus { border-color: var(--magenta); }
+        
+        button { width: 100%; padding: 15px; border: none; border-radius: 12px; background: linear-gradient(90deg, #2563eb, var(--magenta)); font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(217,70,239,0.4); }
+        
+        .infotd { display: none; margin-top: 25px; padding: 20px; background: rgba(0,0,0,0.4); border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .video-box { width: 100%; border-radius: 10px; margin-bottom: 15px; background: #000; max-height: 400px; }
+        .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0; }
+        .stat-item { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; font-size: 0.9rem; }
+        .caption-box { font-size: 0.9rem; color: #cbd5e1; margin-bottom: 20px; line-height: 1.5; }
+        
+        .nav-back { display: block; text-align: center; margin-top: 20px; color: #cbd5e1; text-decoration: none; }
     </style>
 </head>
 <body>
-
-    <div class="title-top">ZyrClient</div>
-
-    <div class="main-card">
-        <div class="brand-header">
-            <i class="fab fa-tiktok"></i>
-            <h2>Tiktok</h2>
-        </div>
-
-        <div class="input-box">
-            <input type="text" id="targetUrl" placeholder="Masukkan link VT / Tiktok yang ingin dituju...">
-            <button class="btn-take" id="takeBtn" onclick="executeTake()">Take</button>
-        </div>
-
-        <div class="infotd" id="infotdPanel">
-            <div class="video-container">
-                <video id="zrVideo" controls></video>
+    <h1>ZyrClient</h1>
+    <div class="container">
+        <div class="header-logo"><i class="fab fa-tiktok"></i> TikTok Downloader</div>
+        
+        <input type="text" id="urlInput" placeholder="Masukkan link VT TikTok...">
+        <button id="takeBtn" onclick="takeData()">Take</button>
+        
+        <div class="infotd" id="infotd">
+            <video class="video-box" id="vidPlayer" controls></video>
+            <h3 id="username" style="color: var(--magenta); margin-bottom:10px;">@username</h3>
+            
+            <div class="stats">
+                <div class="stat-item">♥️ Like: <span id="s-like">0</span></div>
+                <div class="stat-item">💬 Komentar: <span id="s-komen">0</span></div>
+                <div class="stat-item">🔶 Favorit: <span id="s-fav">0</span></div>
+                <div class="stat-item">↪️ Share: <span id="s-share">0</span></div>
+                <div class="stat-item" style="grid-column: span 2;">👥 Views: <span id="s-views">0</span></div>
             </div>
-
-            <div class="username">
-                <i class="fas fa-user-circle"></i> <span id="zrUser">@username</span>
-            </div>
-
-            <div class="stats-container">
-                <div class="stat-box"><i class="fas fa-heart"></i> Like: <span id="zrLike">0</span></div>
-                <div class="stat-box"><i class="fas fa-comment"></i> Komentar: <span id="zrComment">0</span></div>
-                <div class="stat-box"><i class="fas fa-star"></i> Favorit: <span id="zrFav">0</span></div>
-                <div class="stat-box"><i class="fas fa-share"></i> Share: <span id="zrShare">0</span></div>
-                <div class="stat-box"><i class="fas fa-eye"></i> Views: <span id="zrViews">0</span></div>
-            </div>
-
-            <div class="caption-box">
-                <strong>Caption:</strong>
-                <p id="zrCaption">Text caption...</p>
-            </div>
-
-            <div class="action-buttons">
-                <button class="btn-action btn-download" onclick="downloadVideo()">
-                    <i class="fas fa-file-download"></i> Download Video (1080p No WM)
-                </button>
-                <button class="btn-action btn-plugin" onclick="downloadTiktokPlugin()">
-                    <i class="fas fa-code"></i> Download Plugin (.JS Function)
-                </button>
-            </div>
+            
+            <div class="caption-box"><strong>Caption:</strong> <br><span id="captionText">-</span></div>
+            
+            <button onclick="downloadVid()">Download</button>
+            <button onclick="downloadPluginTiktok()" style="background: #1e3a8a;">Download Plugin</button>
         </div>
     </div>
-
-    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a>
+    <a href="index.html" class="nav-back">Kembali</a>
 
     <script>
-        let globalVideoUrl = "";
-        let rawDataCache = null;
+        let currentVideoUrl = "";
 
-        async function executeTake() {
-            const url = document.getElementById('targetUrl').value.trim();
-            const takeBtn = document.getElementById('takeBtn');
-            const panel = document.getElementById('infotdPanel');
-
-            if(!url) return alert('Masukkan link TikTok valid!');
+        async function takeData() {
+            const url = document.getElementById('urlInput').value.trim();
+            if(!url) return alert("Masukkan link!");
+            document.getElementById('takeBtn').innerText = "Memproses...";
             
-            takeBtn.disabled = true;
-            takeBtn.innerText = 'Mengambil Data API...';
-
             try {
-                // Integrasi Engine API Tikwm Publik
                 const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
                 const json = await res.json();
-
-                if(json.code === 0 && json.data) {
-                    const vData = json.data;
-                    rawDataCache = vData;
-                    globalVideoUrl = vData.play; // HD No Watermark Link
-
-                    document.getElementById('zrVideo').src = globalVideoUrl;
-                    document.getElementById('zrUser').innerText = `@${vData.author.unique_id}`;
-                    document.getElementById('zrLike').innerText = vData.digg_count.toLocaleString();
-                    document.getElementById('zrComment').innerText = vData.comment_count.toLocaleString();
-                    document.getElementById('zrFav').innerText = vData.collect_count.toLocaleString();
-                    document.getElementById('zrShare').innerText = vData.share_count.toLocaleString();
-                    document.getElementById('zrViews').innerText = vData.play_count.toLocaleString();
-                    document.getElementById('zrCaption').innerText = vData.title || 'No Caption';
-
-                    panel.style.display = 'block';
+                
+                if(json.code === 0) {
+                    const d = json.data;
+                    document.getElementById('vidPlayer').src = d.play;
+                    currentVideoUrl = d.play;
+                    document.getElementById('username').innerText = `@${d.author.unique_id}`;
+                    document.getElementById('s-like').innerText = d.digg_count.toLocaleString();
+                    document.getElementById('s-komen').innerText = d.comment_count.toLocaleString();
+                    document.getElementById('s-fav').innerText = d.collect_count.toLocaleString();
+                    document.getElementById('s-share').innerText = d.share_count.toLocaleString();
+                    document.getElementById('s-views').innerText = d.play_count.toLocaleString();
+                    document.getElementById('captionText').innerText = d.title || "Tidak ada caption";
+                    
+                    document.getElementById('infotd').style.display = "block";
                 } else {
-                    alert('Gagal mengambil data struktur video. Pastikan link benar!');
+                    alert("Gagal mengambil data dari URL.");
                 }
-            } catch (err) {
-                alert('Gangguan respon API internal.');
-            } finally {
-                takeBtn.disabled = false;
-                takeBtn.innerText = 'Take';
-            }
+            } catch(e) { alert("Error API"); }
+            document.getElementById('takeBtn').innerText = "Take";
         }
 
-        function downloadVideo() {
-            if(!globalVideoUrl) return;
+        function downloadVid() {
+            if(!currentVideoUrl) return;
             const a = document.createElement('a');
-            a.href = globalVideoUrl;
-            a.download = `ZyrClient_1080p_${Date.now()}.mp4`;
+            a.href = currentVideoUrl + "&dl=1"; // Parameter force download
+            a.target = "_blank";
+            a.download = "ZyrClient_Tiktok.mp4";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
         }
 
-        function downloadTiktokPlugin() {
-            // Script template fungsi murni siap pakai untuk bot WA, Script, Web lain
-            const scriptCode = `/**
- * ZyrClient - TikTok Downloader Module Plugin
- * Bersifat Universal: Bisa digunakan di Bot WhatsApp, Web, App & Plugin
- */
-async function fetchZyrTiktok(targetUrl) {
-    try {
-        const response = await fetch(\`https://www.tikwm.com/api/?url=\${encodeURIComponent(targetUrl)}\`);
-        const result = await response.json();
-        if(result.code === 0) {
-            const node = result.data;
-            return {
-                status: true,
-                username: node.author.unique_id,
-                nickname: node.author.nickname,
-                video_1080p_no_wm: node.play,
-                likes: node.digg_count,
-                comments: node.comment_count,
-                favorites: node.collect_count,
-                shares: node.share_count,
-                views: node.play_count,
-                caption: node.title
-            };
-        }
-        return { status: false, message: "Data tak ditemukan" };
-    } catch (e) {
-        return { status: false, error: e.message };
-    }
+        function downloadPluginTiktok() {
+            const code = `
+/* Plugin ZyrClient - TikTok Scraper */
+async function zyrtiktok(url) {
+    let res = await fetch('https://www.tikwm.com/api/?url=' + encodeURIComponent(url));
+    let json = await res.json();
+    if(json.code === 0) {
+        return { 
+            video: json.data.play, like: json.data.digg_count, komen: json.data.comment_count,
+            share: json.data.share_count, favorit: json.data.collect_count, views: json.data.play_count, caption: json.data.title
+        };
+    } else { return null; }
 }`;
-            const blob = new Blob([scriptCode], { type: 'text/javascript' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'zyr-tiktok-plugin.js';
-            link.click();
+            const blob = new Blob([code], { type: "text/javascript" });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "ZyrTiktokPlugin.js";
+            a.click();
         }
     </script>
 </body>

@@ -7,175 +7,54 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0b0f19, #1e1b4b, #1e3a8a);
-            --primary-blue: #3b82f6;
-            --dark-blue: #1e3a8a;
+            --bg-gradient: linear-gradient(135deg, #0f172a, #1e3a8a, #4c1d95, #2563eb);
+            --panel-bg: rgba(30, 58, 138, 0.6);
+            --border-color: rgba(59, 130, 246, 0.4);
             --magenta: #d946ef;
-            --card-bg: rgba(30, 58, 138, 0.4);
             --text-light: #f8fafc;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body {
-            background: var(--bg-gradient);
-            background-size: 400% 400%;
-            animation: gradientWave 12s ease infinite;
-            color: var(--text-light);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow-x: hidden;
+            background: var(--bg-gradient); background-size: 400% 400%;
+            animation: waveAnim 15s ease infinite; color: var(--text-light);
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;
         }
-
-        @keyframes gradientWave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes waveAnim { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        
+        .container { width: 100%; max-width: 800px; text-align: center; }
+        h1 { font-size: 3.5rem; background: linear-gradient(to right, #3b82f6, #d946ef); -webkit-background-clip: text; color: transparent; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; color: #cbd5e1; margin-bottom: 40px; }
+        
+        .menu-grid { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        .panel {
+            background: var(--panel-bg); border: 2px solid var(--border-color); border-radius: 20px;
+            width: 100%; max-width: 500px; padding: 20px; display: flex; align-items: center; gap: 20px;
+            cursor: pointer; text-decoration: none; color: white; transition: all 0.3s ease; backdrop-filter: blur(10px);
         }
-
-        /* Gelombang Animasi Background */
-        .ocean {
-            height: 15%;
-            width: 100%;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            background: none;
-            opacity: 0.15;
-            pointer-events: none;
-        }
-        .wave {
-            background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg') repeat-x;
-            position: absolute;
-            top: -55px;
-            width: 6400px;
-            height: 198px;
-            animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
-            transform: translate3d(0, 0, 0);
-        }
-        @keyframes wave {
-            0% { margin-left: 0; }
-            100% { margin-left: -1600px; }
-        }
-
-        .container {
-            width: 90%;
-            max-width: 900px;
-            text-align: center;
-            z-index: 5;
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 4.5rem;
-            font-weight: 900;
-            letter-spacing: 1px;
-            background: linear-gradient(to right, var(--primary-blue), var(--magenta));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
-        }
-
-        .subtitle {
-            font-size: 1.25rem;
-            color: #94a3b8;
-            margin-bottom: 50px;
-        }
-
-        /* Panel Menu Grid */
-        .panel-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            justify-content: center;
-        }
-
-        .panel-card {
-            background: var(--card-bg);
-            border: 2px solid rgba(59, 130, 246, 0.3);
-            border-radius: 20px; /* Persegi panjang ujung bulat */
-            padding: 30px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            text-decoration: none;
-            color: var(--text-light);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        .panel-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--magenta);
-            background: rgba(30, 58, 138, 0.7);
-            box-shadow: 0 15px 35px rgba(217, 70, 239, 0.25);
-        }
-
-        .panel-card i {
-            font-size: 3rem;
-            background: linear-gradient(45deg, #fff, var(--primary-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .panel-card.hd i {
-            background: linear-gradient(45deg, #fff, var(--magenta));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .panel-info h3 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            text-align: left;
-            margin-bottom: 4px;
-        }
-
-        .panel-info p {
-            font-size: 0.95rem;
-            color: #cbd5e1;
-            text-align: left;
-        }
+        .panel:hover { transform: translateY(-5px); border-color: var(--magenta); box-shadow: 0 10px 20px rgba(217, 70, 239, 0.3); }
+        .panel i { font-size: 2.5rem; width: 50px; text-align: center; }
+        .panel span { font-size: 1.5rem; font-weight: bold; }
     </style>
 </head>
 <body>
-
-    <div class="ocean">
-        <div class="wave"></div>
-    </div>
-
     <div class="container">
         <h1>ZyrClient</h1>
         <p class="subtitle">Selamat datang di ZyrClient, api fungsi gratis untuk downloader.</p>
-
-        <div class="panel-grid">
-            <a href="TiktokD.html" class="panel-card">
-                <i class="fab fa-tiktok"></i>
-                <div class="panel-info">
-                    <h3>Tiktok</h3>
-                    <p>Fungsi download video & instan tracking API.</p>
-                </div>
+        
+        <div class="menu-grid">
+            <a href="TiktokD.html" class="panel">
+                <i class="fab fa-tiktok" style="color: #fff;"></i>
+                <span>Tiktok Downloader</span>
             </a>
-
-            <a href="Hd.html" class="panel-card hd">
-                <i class="fas fa-image"></i>
-                <div class="panel-info">
-                    <h3>HD</h3>
-                    <p>Fungsi Upscaler resolusi gambar & video.</p>
-                </div>
+            <a href="Hd.html" class="panel">
+                <i class="fas fa-image" style="color: #38bdf8;"></i>
+                <span>HD Client</span>
+            </a>
+            <a href="Wabg.html" class="panel">
+                <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                <span>WhatsApp Ebg</span>
             </a>
         </div>
     </div>
-
 </body>
 </html>
