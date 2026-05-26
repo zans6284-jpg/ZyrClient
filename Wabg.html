@@ -3,31 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - WA Ebg</title>
+    <title>ZyrClient</title>
     <style>
-        :root { --bg: linear-gradient(135deg, #0f172a, #1e3a8a, #4c1d95, #2563eb); --panel: rgba(30, 58, 138, 0.7); --magenta: #d946ef; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: monospace, sans-serif; color: white; }
-        body { background: var(--bg); background-size: 400% 400%; animation: wave 15s ease infinite; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
-        @keyframes wave { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+        :root { 
+            --bg: linear-gradient(135deg, #0f172a, #1e3a8a, #4c1d95, #2563eb); 
+            --panel: rgba(30, 58, 138, 0.7); 
+            --magenta: #d946ef; 
+        }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: monospace, sans-serif; 
+            color: white; 
+        }
+        body { 
+            background: var(--bg); 
+            background-size: 400% 400%; 
+            animation: wave 15s ease infinite; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 40px 20px; 
+        }
+        @keyframes wave { 
+            0% { background-position: 0% 50%; } 
+            100% { background-position: 100% 50%; } 
+        }
         
-        .container { width: 100%; max-width: 700px; background: var(--panel); border: 1px solid rgba(59,130,246,0.5); border-radius: 20px; padding: 30px; text-align: center; backdrop-filter: blur(10px); }
-        h1 { color: #3b82f6; margin-bottom: 20px; font-family: sans-serif; }
+        .container { 
+            width: 100%; 
+            max-width: 700px; 
+            background: var(--panel); 
+            border: 1px solid rgba(59,130,246,0.5); 
+            border-radius: 20px; 
+            padding: 30px; 
+            text-align: center; 
+            backdrop-filter: blur(10px); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1 { 
+            color: #3b82f6; 
+            margin-bottom: 20px; 
+            font-family: sans-serif; 
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+        }
         
-        .img-box { width: 100%; height: 150px; background: #000; border-radius: 12px; margin-bottom: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center;}
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .img-box { 
+            width: 100%; 
+            height: 200px; 
+            background: #000; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            overflow: hidden; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .img-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
         
-        input, select { width: 100%; padding: 15px; background: rgba(0,0,0,0.4); border-radius: 12px; border: 2px solid #3b82f6; margin-bottom: 15px; font-size: 1rem; outline: none; }
-        input:focus { border-color: var(--magenta); }
+        input[type="number"], input[type="file"] { 
+            width: 100%; 
+            padding: 15px; 
+            background: rgba(0,0,0,0.5); 
+            border-radius: 12px; 
+            border: 2px solid #3b82f6; 
+            margin-bottom: 15px; 
+            font-size: 1rem; 
+            outline: none; 
+            transition: 0.3s;
+        }
+        input[type="number"]:focus { 
+            border-color: var(--magenta); 
+            box-shadow: 0 0 10px rgba(217,70,239,0.5);
+        }
         
-        button { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: sans-serif; margin-bottom: 15px; }
-        #btnLogin { background: linear-gradient(90deg, #25D366, #128C7E); }
-        #btnUpload { background: linear-gradient(90deg, #3b82f6, var(--magenta)); }
-        button:hover { transform: translateY(-2px); filter: brightness(1.2); }
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-family: sans-serif; 
+            margin-bottom: 20px; 
+        }
+        #btnLogin { 
+            background: linear-gradient(90deg, #25D366, #128C7E); 
+        }
+        #btnUpload { 
+            background: linear-gradient(90deg, #3b82f6, var(--magenta)); 
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        button:hover:not(:disabled) { 
+            transform: translateY(-2px); 
+            filter: brightness(1.2); 
+        }
+        button:disabled {
+            background: #475569 !important;
+            cursor: not-allowed;
+            transform: none;
+        }
         
-        .display-box { width: 100%; padding: 15px; border-radius: 12px; background: #000; border: 1px solid #333; text-align: left; margin-bottom: 15px; font-size: 1rem; }
-        .pairing-card { text-align: center; font-size: 2rem; font-weight: bold; color: #fbbf24; letter-spacing: 5px; background: rgba(251,191,36,0.1); border: 2px dashed #fbbf24; }
-        
-        .section-title { font-size: 1rem; text-align: left; margin-bottom: 5px; color: #cbd5e1; font-weight: bold; }
+        .display-box { 
+            width: 100%; 
+            padding: 15px; 
+            border-radius: 12px; 
+            background: #000; 
+            border: 1px solid #333; 
+            text-align: left; 
+            margin-bottom: 15px; 
+            font-size: 1rem; 
+        }
+        .pairing-card { 
+            text-align: center; 
+            font-size: 2.2rem; 
+            font-weight: bold; 
+            color: #fbbf24; 
+            letter-spacing: 5px; 
+            background: rgba(251,191,36,0.1); 
+            border: 2px dashed #fbbf24; 
+        }
+        .section-title { 
+            font-size: 1rem; 
+            text-align: left; 
+            margin-bottom: 5px; 
+            color: #cbd5e1; 
+            font-weight: bold; 
+        }
     </style>
 </head>
 <body>
@@ -36,11 +149,11 @@
     
     <div class="container">
         <div class="img-box">
-            <img src="Wbg.png" alt="Wbg Logo" onerror="this.src='https://via.placeholder.com/600x150/128C7E/FFFFFF?text=Wbg.png';">
+            <img src="Wbg.png" alt="Wbg Logo" onerror="this.src='https://via.placeholder.com/600x200/128C7E/FFFFFF?text=Wbg.png';">
         </div>
         
         <div class="section-title">Nomor WhatsApp Global:</div>
-        <input type="number" id="waNumber" placeholder="Contoh: 628123456789 (Tanpa '+')">
+        <input type="number" id="waNumber" placeholder="Contoh: 6285194814013">
         
         <button id="btnLogin" onclick="requestPairingCode()">Login & Dapatkan Pairing Code</button>
         
@@ -52,16 +165,16 @@
         
         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 25px 0;">
         
-        <div class="section-title">Pilih File Foto / Video untuk Story (Status WA):</div>
+        <div class="section-title">Isi File Foto / Video (Story WA):</div>
         <input type="file" id="storyFile" accept="image/*, video/*">
         
         <button id="btnUpload" onclick="uploadToStory()">Upload ke Story WA</button>
     </div>
 
-    <a href="index.html" style="display:block; margin-top:20px; color:#cbd5e1; text-decoration:none;">&larr; Kembali ke Utama</a>
+    <a href="index.html" style="display:block; margin-top:20px; color:#cbd5e1; text-decoration:none;">&larr; Kembali</a>
 
     <script>
-        // GANTI LINK DI BAWAH INI DENGAN URL TUNNEL PINGGY/NGROK DARI UBUNTU KAMU
+        // MASUKKAN LINK HTTPS DARI PINGGY KAMU DI SINI (JANGAN PAKAI '/' DI AKHIR KATA)
         const BACKEND_URL = "https://zyvib-140-213-158-138.run.pinggy-free.link";
 
         async function requestPairingCode() {
@@ -71,15 +184,30 @@
             const statusBox = document.getElementById('statusDisplay');
             
             if(!number) return alert("Masukkan nomor WhatsApp terlebih dahulu!");
-            if(number.includes('+')) return alert("Jangan gunakan tanda '+' !");
+            if(number.includes('+')) return alert("Masukkan nomor tanpa menggunakan tanda '+' !");
 
             btn.innerText = "Memproses...";
+            btn.disabled = true;
             codeBox.innerText = "LOADING...";
-            statusBox.innerText = "CONNECTING TO SERVER...";
+            statusBox.innerText = "CONNECTING TO BACKEND...";
             statusBox.style.color = "#fbbf24";
 
             try {
-                const response = await fetch(`${BACKEND_URL}/api/connect?number=${number}`);
+                // Bersihkan url jika ada slash di bagian akhir
+                const cleanUrl = BACKEND_URL.endsWith('/') ? BACKEND_URL.slice(0, -1) : BACKEND_URL;
+                
+                // Fetch dengan header khusus bypass halaman "Press Enter" milik Pinggy
+                const response = await fetch(`${cleanUrl}/api/connect?number=${number}`, {
+                    method: 'GET',
+                    headers: {
+                        'x-pinggy-no-interstitial': 'true'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Server Error (Status: ${response.status})`);
+                }
+                
                 const data = await response.json();
 
                 if(data.status === "pairing") {
@@ -91,14 +219,17 @@
                     statusBox.innerText = "CONNECTED (Sudah Terhubung)";
                     statusBox.style.color = "#25D366";
                 } else {
-                    throw new Error(data.message);
+                    throw new Error(data.message || "Gagal mendapatkan kode pairing");
                 }
             } catch (error) {
                 codeBox.innerText = "ERROR";
                 statusBox.innerText = "GAGAL TERHUBUNG: " + error.message;
                 statusBox.style.color = "#ef4444";
+                console.error(error);
+            } finally {
+                btn.innerText = "Login & Dapatkan Pairing Code";
+                btn.disabled = false;
             }
-            btn.innerText = "Login & Dapatkan Pairing Code";
         }
 
         async function uploadToStory() {
@@ -111,7 +242,6 @@
             btn.innerText = "Mengupload...";
             btn.disabled = true;
 
-            // Membaca file menjadi Base64 string agar bisa dikirim via JSON API
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = async () => {
@@ -119,23 +249,29 @@
                 const fileType = file.type.startsWith('image/') ? 'image' : 'video';
 
                 try {
-                    const response = await fetch(`${BACKEND_URL}/api/upload-story`, {
+                    const cleanUrl = BACKEND_URL.endsWith('/') ? BACKEND_URL.slice(0, -1) : BACKEND_URL;
+                    
+                    const response = await fetch(`${cleanUrl}/api/upload-story`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'x-pinggy-no-interstitial': 'true' // Bypass halaman interstitial Pinggy
+                        },
                         body: JSON.stringify({
                             media: base64Data,
                             type: fileType
                         })
                     });
+                    
                     const resData = await response.json();
 
                     if(response.ok && resData.status === "success") {
-                        alert("Berhasil! Berhasil mengupload file ke Story/Status WhatsApp.");
+                        alert("Berhasil! File telah terposting ke Story WhatsApp kamu.");
                     } else {
-                        alert("Gagal upload: " + resData.message);
+                        alert("Gagal upload: " + (resData.message || "Ditolak oleh server"));
                     }
                 } catch (error) {
-                    alert("Error saat upload ke server: " + error.message);
+                    alert("Error saat mengirim file ke backend: " + error.message);
                 } finally {
                     btn.innerText = "Upload ke Story WA";
                     btn.disabled = false;
