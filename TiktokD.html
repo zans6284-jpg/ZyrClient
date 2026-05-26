@@ -7,12 +7,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b, #4c1d95);
-            --primary-blue: #2563eb;
-            --light-blue: #3b82f6;
-            --dark-blue: #1d4ed8; /* Biru tua tidak terlalu tua */
-            --panel-bg: #1e3a8a; /* UI Biru Tua pas */
+            --bg-gradient: linear-gradient(135deg, #0f172a, #1e3a8a, #d946ef, #2563eb);
+            --primary-blue: #3b82f6;
+            --dark-blue: #1d4ed8; 
             --magenta: #d946ef;
+            --panel-bg: rgba(29, 78, 216, 0.4); /* Biru tua UI */
             --text-light: #f8fafc;
         }
 
@@ -26,7 +25,7 @@
         body {
             background: var(--bg-gradient);
             background-size: 400% 400%;
-            animation: gradientWave 15s ease infinite;
+            animation: gradientWave 12s ease infinite;
             color: var(--text-light);
             min-height: 100vh;
             padding: 40px 20px;
@@ -42,23 +41,24 @@
         }
 
         .title-top {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 800;
-            background: linear-gradient(to right, #3b82f6, #d946ef);
+            background: linear-gradient(to right, #60a5fa, #d946ef);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
-        /* Main Downloader Card */
-        .downloader-card {
+        /* Frame Utama - Lebar dan Besar */
+        .frame-card {
             background: var(--panel-bg);
+            backdrop-filter: blur(12px);
             width: 100%;
-            max-width: 550px;
-            padding: 30px;
-            border-radius: 24px; /* Ujung bulat */
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            max-width: 650px; /* Frame cukup besar untuk menampilkan semuanya */
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             text-align: center;
         }
 
@@ -66,140 +66,136 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
         .brand-section i {
-            font-size: 2rem;
-            color: var(--text-light);
+            font-size: 2.5rem;
         }
 
         .brand-section h2 {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 600;
         }
 
-        /* Input Form */
         .input-group {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
         input[type="text"] {
             width: 100%;
-            padding: 15px 20px;
-            border-radius: 12px;
-            border: 2px solid var(--light-blue);
-            background: rgba(15, 23, 42, 0.6);
+            padding: 18px 25px;
+            border-radius: 15px;
+            border: 2px solid var(--primary-blue);
+            background: rgba(15, 23, 42, 0.8);
             color: white;
-            font-size: 1rem;
+            font-size: 1.1rem;
             outline: none;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
 
         input[type="text"]:focus {
             border-color: var(--magenta);
+            box-shadow: 0 0 15px rgba(217, 70, 239, 0.3);
         }
 
         button {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(to right, var(--primary-blue), var(--dark-blue));
+            border-radius: 15px;
+            background: linear-gradient(to right, var(--dark-blue), var(--primary-blue));
             color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1.2rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         button:hover {
-            background: linear-gradient(to right, var(--light-blue), var(--magenta));
+            background: linear-gradient(to right, var(--primary-blue), var(--magenta));
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(217, 70, 239, 0.4);
         }
 
-        button:disabled {
-            background: #64748b;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Info Panel (infotd) */
+        /* Panel Infotd */
         .infotd {
-            display: none; /* Tersembunyi di awal */
-            margin-top: 30px;
-            background: rgba(15, 23, 42, 0.5);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(217, 70, 239, 0.2);
+            display: none;
+            margin-top: 20px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(96, 165, 250, 0.3);
             text-align: left;
         }
 
-        .video-preview {
+        .video-container {
             width: 100%;
             border-radius: 12px;
-            margin-bottom: 15px;
-            max-height: 400px;
-            object-fit: contain;
+            overflow: hidden;
+            margin-bottom: 20px;
             background: #000;
         }
 
+        video {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+        }
+
         .username {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--magenta);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Grid Statistik */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .stat-item {
-            background: rgba(30, 58, 138, 0.7);
-            padding: 10px 15px;
-            border-radius: 8px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 0.95rem;
         }
 
-        .stat-item i {
-            font-size: 1.1rem;
+        /* Grid Statistik Fleksibel */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: rgba(29, 78, 216, 0.5);
+            padding: 12px 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
         }
 
         .fa-heart { color: #ef4444; }
         .fa-comment { color: #38bdf8; }
-        .fa-star { color: #fbbf24; }
-        .fa-eye { color: #34d399; }
+        .fa-bookmark { color: #fbbf24; }
+        .fa-share { color: #a855f7; }
+        .fa-users { color: #34d399; }
 
-        .caption {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #cbd5e1;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 12px;
+        .caption-box {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--magenta);
         }
 
         .back-btn {
-            margin-top: 25px;
-            display: inline-block;
+            margin-top: 30px;
             color: #94a3b8;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 1rem;
             transition: color 0.3s;
         }
         .back-btn:hover { color: white; }
@@ -209,105 +205,108 @@
 
     <div class="title-top">ZyrClient</div>
 
-    <div class="downloader-card">
+    <div class="frame-card">
         <div class="brand-section">
             <i class="fab fa-tiktok"></i>
-            <h2>TikTok Downloader</h2>
+            <h2>TikTok</h2>
         </div>
 
         <div class="input-group">
-            <input type="text" id="tiktokUrl" placeholder="Masukkan link Video TikTok di sini...">
-            <button id="downloadBtn" onclick="handleDownload()">Download</button>
+            <input type="text" id="tiktokUrl" placeholder="Tempel URL TikTok di sini...">
+            <button id="downloadBtn" onclick="fetchTikTokData()">Download</button>
         </div>
 
         <div class="infotd" id="infoPanel">
-            <video class="video-preview" id="videoPlayer" controls></video>
+            
+            <div class="video-container">
+                <video id="videoPlayer" controls autoplay name="media"></video>
+            </div>
             
             <div class="username">
-                <i class="fas fa-user-circle"></i> <span id="authorName">Username</span>
+                <i class="fas fa-user-circle"></i> <span id="usernameVal">@username</span>
             </div>
 
             <div class="stats-grid">
                 <div class="stat-item">
                     <i class="fas fa-heart"></i>
-                    <span>Like: <strong id="likeCount">0</strong></span>
+                    <span><strong id="likeVal">0</strong></span>
                 </div>
                 <div class="stat-item">
                     <i class="fas fa-comment"></i>
-                    <span>Komentar: <strong id="commentCount">0</strong></span>
+                    <span><strong id="commentVal">0</strong></span>
                 </div>
                 <div class="stat-item">
-                    <i class="fas fa-star"></i>
-                    <span>Favorit: <strong id="favoriteCount">0</strong></span>
+                    <i class="fas fa-bookmark"></i>
+                    <span><strong id="favVal">0</strong></span>
                 </div>
                 <div class="stat-item">
-                    <i class="fas fa-eye"></i>
-                    <span>Views: <strong id="viewCount">0</strong></span>
+                    <i class="fas fa-share"></i>
+                    <span><strong id="shareVal">0</strong></span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <span><strong id="viewVal">0</strong></span>
                 </div>
             </div>
 
-            <div class="caption">
-                <strong>Caption:</strong>
-                <p id="videoCaption">Isi caption dari video...</p>
+            <div class="caption-box">
+                <strong>Caption:</strong><br>
+                <span id="captionVal">Isi caption akan muncul di sini...</span>
             </div>
         </div>
     </div>
 
-    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a>
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali ke Menu Utama</a>
 
     <script>
-        async function handleDownload() {
+        async function fetchTikTokData() {
             const urlInput = document.getElementById('tiktokUrl').value.trim();
-            const downloadBtn = document.getElementById('downloadBtn');
-            const infoPanel = document.getElementById('infoPanel');
+            const btn = document.getElementById('downloadBtn');
+            const panel = document.getElementById('infoPanel');
 
             if (!urlInput) {
-                alert('Silakan masukkan link TikTok terlebih dahulu!');
+                alert('Tolong masukkan link TikTok yang ingin diunduh.');
                 return;
             }
 
-            // Ubah text tombol saat loading
-            downloadBtn.disabled = true;
-            downloadBtn.innerText = 'Memproses...';
+            btn.disabled = true;
+            btn.innerText = 'Mengambil Data...';
 
             try {
-                // Menggunakan API publik Tikwm (Gratis, tanpa token, stabil untuk data parsing)
-                const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(urlInput)}`;
-                
-                const response = await fetch(apiUrl);
-                const result = await response.json();
+                // Endpoint gratis menggunakan TikWM API yang merespon dengan format JSON
+                const apiFetch = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(urlInput)}`);
+                const response = await apiFetch.json();
 
-                if (result.code === 0 && result.data) {
-                    const data = result.data;
+                if (response.code === 0 && response.data) {
+                    const data = response.data;
 
-                    // 1. Masukkan Video Source ke Player
-                    const videoPlayer = document.getElementById('videoPlayer');
-                    videoPlayer.src = data.play; // Link video tanpa watermark
+                    // 1. Memasukkan sumber video (Tanpa Watermark)
+                    document.getElementById('videoPlayer').src = data.play;
 
-                    // 2. Set Username / Nickname penulis
-                    document.getElementById('authorName').innerText = `@${data.author.unique_id} (${data.author.nickname})`;
+                    // 2. Mengambil data username
+                    document.getElementById('usernameVal').innerText = `@${data.author.unique_id}`;
 
-                    // 3. Set Statistik Data (Format Angka jika besar)
-                    document.getElementById('likeCount').innerText = data.digg_count.toLocaleString('id-ID');
-                    document.getElementById('commentCount').innerText = data.comment_count.toLocaleString('id-ID');
-                    document.getElementById('favoriteCount').innerText = data.collect_count.toLocaleString('id-ID');
-                    document.getElementById('viewCount').innerText = data.play_count.toLocaleString('id-ID');
+                    // 3. Mengambil statistik video (diformat dengan pemisah ribuan)
+                    document.getElementById('likeVal').innerText = data.digg_count.toLocaleString('id-ID');
+                    document.getElementById('commentVal').innerText = data.comment_count.toLocaleString('id-ID');
+                    document.getElementById('favVal').innerText = data.collect_count.toLocaleString('id-ID'); // Collect = Favorit
+                    document.getElementById('shareVal').innerText = data.share_count.toLocaleString('id-ID');
+                    document.getElementById('viewVal').innerText = data.play_count.toLocaleString('id-ID');
 
-                    // 4. Set Caption
-                    document.getElementById('videoCaption').innerText = data.title || 'Tidak ada caption.';
+                    // 4. Mengambil teks/caption
+                    document.getElementById('captionVal').innerText = data.title || 'Tidak ada deskripsi.';
 
-                    // Tampilkan table panel infotd setelah data berhasil masuk
-                    infoPanel.style.display = 'block';
+                    // Menampilkan panel infotd
+                    panel.style.display = 'block';
                 } else {
-                    alert('Gagal mengambil data video. Pastikan tautan TikTok valid dan publik.');
+                    alert('Gagal mengambil data. Pastikan link video valid dan akun tidak di-private.');
                 }
-            } catch (error) {
-                console.error(error);
-                alert('Terjadi kesalahan koneksi saat menghubungi server API.');
+            } catch (err) {
+                alert('Kesalahan sistem atau masalah koneksi internet.');
+                console.error(err);
             } finally {
-                // Kembalikan status tombol download
-                downloadBtn.disabled = false;
-                downloadBtn.innerText = 'Download';
+                btn.disabled = false;
+                btn.innerText = 'Download';
             }
         }
     </script>

@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - API Fungsi Gratis</title>
+    <title>ZyrClient - </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b, #4c1d95);
-            --primary-blue: #2563eb;
-            --light-blue: #3b82f6;
-            --dark-blue: #1e3a8a;
+            /* Tema warna: Biru tua, Biru, dan Magenta */
+            --bg-gradient: linear-gradient(135deg, #0f172a, #1e3a8a, #d946ef, #2563eb);
+            --primary-blue: #3b82f6;
+            --dark-blue: #1d4ed8; /* Biru tua tidak terlalu gelap */
             --magenta: #d946ef;
             --text-light: #f8fafc;
         }
@@ -25,7 +25,7 @@
         body {
             background: var(--bg-gradient);
             background-size: 400% 400%;
-            animation: gradientWave 15s ease infinite;
+            animation: gradientWave 12s ease infinite;
             color: var(--text-light);
             min-height: 100vh;
             display: flex;
@@ -43,55 +43,58 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Dekorasi Gelombang Tambahan */
-        .wave {
+        /* Elemen Gelombang Visual Tambahan */
+        .wave-bottom {
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 100%;
-            height: 100px;
-            background: url('https://i.imgur.com/vHRE75K.png'); /* Placeholder gelombang murni */
-            background-size: 1000px 100px;
-            opacity: 0.1;
-            animation: waveAnim 10s linear infinite;
+            width: 200%;
+            height: 150px;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="rgba(255,255,255,0.05)" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+            animation: waveMove 15s linear infinite;
         }
 
-        @keyframes waveAnim {
-            0% { background-position-x: 0; }
-            100% { background-position-x: 1000px; }
+        @keyframes waveMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         .container {
             text-align: center;
             z-index: 10;
             padding: 20px;
+            width: 100%;
+            max-width: 700px; /* Lebar frame yang proporsional */
         }
 
-        h1 {
-            font-size: 4rem;
+        .title {
+            font-size: 4.5rem;
             font-weight: 800;
             letter-spacing: 2px;
-            background: linear-gradient(to right, #3b82f6, #d946ef);
+            background: linear-gradient(to right, #60a5fa, #d946ef);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
-            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
         }
 
         .subtitle {
-            font-size: 1.2rem;
-            color: #94a3b8;
+            font-size: 1.3rem;
+            color: #cbd5e1;
             margin-bottom: 50px;
+            line-height: 1.5;
         }
 
-        /* Table Panel / Card Menu */
+        /* Panel Menu TikTok */
         .panel-menu {
-            background: linear-gradient(135deg, var(--dark-blue), rgba(37, 99, 235, 0.4));
-            width: 320px;
-            padding: 25px;
+            background: rgba(29, 78, 216, 0.6); /* Biru tua transparan */
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
             border-radius: 20px; /* Persegi panjang ujung bulat */
-            border: 2px solid rgba(59, 130, 246, 0.5);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(96, 165, 250, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -106,33 +109,31 @@
         .panel-menu:hover {
             transform: translateY(-5px);
             border-color: var(--magenta);
-            box-shadow: 0 12px 20px rgba(217, 70, 239, 0.3);
-            background: linear-gradient(135deg, var(--primary-blue), rgba(217, 70, 239, 0.3));
+            box-shadow: 0 12px 25px rgba(217, 70, 239, 0.4);
+            background: rgba(37, 99, 235, 0.8);
         }
 
         .panel-menu i {
-            font-size: 2.5rem;
-            color: #fff;
+            font-size: 3rem;
         }
 
         .panel-menu span {
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: 1px;
+            font-size: 1.8rem;
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
 
-    <div class="wave"></div>
+    <div class="wave-bottom"></div>
 
     <div class="container">
-        <h1>ZyrClient</h1>
+        <h1 class="title">ZyrClient</h1>
         <p class="subtitle">Selamat datang di ZyrClient, api fungsi gratis untuk downloader.</p>
 
         <a href="TiktokD.html" class="panel-menu">
             <i class="fab fa-tiktok"></i>
-            <span>Tiktok Downloader</span>
+            <span>TikTok</span>
         </a>
     </div>
 
