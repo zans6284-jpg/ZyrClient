@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - GitHub Serverless Dashboard</title>
+    <title>ZyrClient - Free Cloud</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -18,7 +18,7 @@
         <h1 class="text-3xl font-bold text-center text-blue-400 mb-6 tracking-wide">ZyrClient Free Cloud</h1>
         
         <div class="w-full h-44 rounded-xl overflow-hidden mb-6 border border-slate-700 shadow-inner">
-            <img src="https://images.uncyc.org/indonesia/thumb/5/52/Shadow_Sama.jpg/300px-Shadow_Sama.jpg" alt="ZyrClient Banner" class="w-full h-full object-cover">
+            <img src="Wbg.png" alt="ZyrClient Banner" class="w-full h-full object-cover">
         </div>
 
         <div class="mb-5">
@@ -42,7 +42,7 @@
         <div class="mb-6">
             <label class="block text-sm font-semibold text-slate-300 mb-2">Status Koneksi:</label>
             <div id="statusDisplay" class="w-full p-3 bg-black/50 border border-slate-800 rounded-lg font-mono text-xs text-center uppercase tracking-wider text-slate-400">
-                Murni GitHub Mode (No Token / No Server)
+                Murni GitHub Mode
             </div>
         </div>
 
@@ -62,99 +62,21 @@
     </div>
 
     <script>
-        // Menggunakan Endpoint API Terbuka Publik (Sebagai Contoh Kolektif Tanpa Token)
-        const PUBLIC_API_URL = "https://api.whatsapp-public-free.net/api"; 
-
         async function requestPairingCode() {
             const number = document.getElementById('waNumber').value.trim();
-            const btn = document.getElementById('btnLogin');
-            const codeBox = document.getElementById('pairingCodeDisplay');
             const statusBox = document.getElementById('statusDisplay');
             
             if(!number) return alert("Masukkan nomor WhatsApp terlebih dahulu!");
 
-            btn.innerText = "Menghubungi Server...";
-            btn.disabled = true;
-            codeBox.innerText = "WAIT...";
-            statusBox.innerText = "MEREQUEST KODE DARI OPEN SERVER PUBLIC...";
-
-            try {
-                // Menembak endpoint publik terbuka yang didesain otomatis membuat sesi temporer berdasarkan nomor HP
-                const targetUrl = `${PUBLIC_API_URL}/get-code?number=${number}`;
-
-                const response = await fetch(targetUrl, { 
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Server Umum Sibuk (${response.status})`);
-                }
-                
-                const data = await response.json();
-
-                if(data && data.code) {
-                    codeBox.innerText = data.code;
-                    statusBox.innerText = "SUKSES! MASUKKAN KODE INI PADA NOTIFIKASI TAUTKAN PERANGKAT DI WA KAMU";
-                    statusBox.style.color = "#25D366";
-                } else {
-                    throw new Error("Gagal mengurai respon kode dari open API.");
-                }
-            } catch (error) {
-                codeBox.innerText = "ERROR";
-                statusBox.innerText = "KENDALA GLOBAL: " + error.message;
-                statusBox.style.color = "#ef4444";
-                console.error(error);
-            } finally {
-                btn.innerText = "Dapatkan Pairing Code Instan";
-                btn.disabled = false;
-            }
+            // Menampilkan pesan realita teknis
+            alert("Sistem Murni GitHub (Tanpa Server & Token) tidak dapat memproses Baileys WhatsApp. Ini akan selalu berujung 'Failed to Fetch' karena tidak ada server backend (Termux/Render) yang menyambungkan web ini ke WhatsApp.");
+            
+            statusBox.innerText = "GAGAL TERHUBUNG (TIDAK ADA SERVER BACKEND)";
+            statusBox.style.color = "#ef4444";
         }
 
         async function uploadToStory() {
-            const number = document.getElementById('waNumber').value.trim();
-            const fileInput = document.getElementById('storyFile');
-            const file = fileInput.files[0];
-            const btn = document.getElementById('btnUpload');
-
-            if(!number) return alert("Isi nomor WhatsApp terlebih dahulu agar server mengenali session!");
-            if(!file) return alert("Pilih file media terlebih dahulu!");
-
-            btn.innerText = "Mengirim...";
-            btn.disabled = true;
-
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                const base64Data = reader.result.split(',')[1];
-
-                try {
-                    const response = await fetch(`${PUBLIC_API_URL}/send-story`, {
-                        method: 'POST',
-                        headers: { 
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            number: number,
-                            media: base64Data,
-                            mimeType: file.type
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        alert("Berhasil mengirim story lewat cloud publik!");
-                    } else {
-                        alert("Gagal mengirim! Kemungkinan sesi perangkat pada open API sudah kedaluwarsa.");
-                    }
-                } catch (error) {
-                    alert("Koneksi gagal: " + error.message);
-                } finally {
-                    btn.innerText = "Upload ke Story WA";
-                    btn.disabled = false;
-                }
-            };
+            alert("Fitur upload membutuhkan server backend (Termux/Render) atau Token API yang valid.");
         }
     </script>
 </body>
