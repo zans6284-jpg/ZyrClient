@@ -7,19 +7,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a, #1e3a8a, #d946ef, #2563eb);
+            --bg-gradient: linear-gradient(135deg, #0b0f19, #1e1b4b, #1e3a8a);
             --primary-blue: #3b82f6;
-            --dark-blue: #1d4ed8; 
+            --dark-blue: #1d4ed8;
+            --panel-bg: #1e3a8a;
             --magenta: #d946ef;
-            --panel-bg: rgba(29, 78, 216, 0.4); /* Biru tua UI */
             --text-light: #f8fafc;
         }
 
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
 
         body {
@@ -42,27 +40,24 @@
 
         .title-top {
             font-size: 3rem;
-            font-weight: 800;
-            background: linear-gradient(to right, #60a5fa, #d946ef);
+            font-weight: 900;
+            background: linear-gradient(to right, var(--primary-blue), var(--magenta));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
         }
 
-        /* Frame Utama - Lebar dan Besar */
-        .frame-card {
+        .main-card {
             background: var(--panel-bg);
-            backdrop-filter: blur(12px);
             width: 100%;
-            max-width: 650px; /* Frame cukup besar untuk menampilkan semuanya */
+            max-width: 750px; /* Lebar optimal pas sesuai request */
             padding: 35px;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.4);
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            text-align: center;
         }
 
-        .brand-section {
+        .brand-header {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -70,244 +65,289 @@
             margin-bottom: 30px;
         }
 
-        .brand-section i {
-            font-size: 2.5rem;
-        }
+        .brand-header i { font-size: 2.5rem; }
+        .brand-header h2 { font-size: 1.8rem; font-weight: 700; }
 
-        .brand-section h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
-
-        .input-group {
+        .input-box {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         input[type="text"] {
             width: 100%;
-            padding: 18px 25px;
-            border-radius: 15px;
+            padding: 16px 20px;
+            border-radius: 12px;
             border: 2px solid var(--primary-blue);
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(11, 15, 25, 0.7);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="text"]:focus { border-color: var(--magenta); }
+
+        .btn-take {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(to right, var(--primary-blue), var(--dark-blue));
             color: white;
             font-size: 1.1rem;
-            outline: none;
+            font-weight: 700;
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        input[type="text"]:focus {
-            border-color: var(--magenta);
-            box-shadow: 0 0 15px rgba(217, 70, 239, 0.3);
-        }
-
-        button {
-            width: 100%;
-            padding: 18px;
-            border: none;
-            border-radius: 15px;
-            background: linear-gradient(to right, var(--dark-blue), var(--primary-blue));
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
+        .btn-take:hover {
             background: linear-gradient(to right, var(--primary-blue), var(--magenta));
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(217, 70, 239, 0.4);
         }
 
-        /* Panel Infotd */
+        /* Infotd Panel */
         .infotd {
             display: none;
-            margin-top: 20px;
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 15px;
+            margin-top: 30px;
+            background: rgba(11, 15, 25, 0.6);
+            border-radius: 16px;
             padding: 25px;
-            border: 1px solid rgba(96, 165, 250, 0.3);
-            text-align: left;
+            border: 1px solid rgba(217, 70, 239, 0.3);
         }
 
         .video-container {
             width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
             margin-bottom: 20px;
-            background: #000;
         }
 
         video {
             width: 100%;
-            max-height: 500px;
-            object-fit: contain;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
         }
 
         .username {
-            font-size: 1.3rem;
-            font-weight: 700;
+            font-size: 1.2rem;
+            font-weight: bold;
             color: var(--magenta);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-        /* Grid Statistik Fleksibel */
-        .stats-grid {
+        .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
-        .stat-item {
-            background: rgba(29, 78, 216, 0.5);
-            padding: 12px 15px;
+        .stat-box {
+            background: rgba(30, 58, 138, 0.6);
+            padding: 12px;
             border-radius: 10px;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1rem;
+            gap: 8px;
         }
 
-        .fa-heart { color: #ef4444; }
-        .fa-comment { color: #38bdf8; }
-        .fa-bookmark { color: #fbbf24; }
-        .fa-share { color: #a855f7; }
-        .fa-users { color: #34d399; }
+        .stat-box i { font-size: 1.1rem; }
+        .fa-heart { color: #ff4757; }
+        .fa-comment { color: #1e90ff; }
+        .fa-star { color: #ffa500; }
+        .fa-share { color: #2ed573; }
+        .fa-eye { color: #a55eea; }
 
         .caption-box {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #e2e8f0;
-            background: rgba(0,0,0,0.2);
+            background: rgba(255,255,255,0.05);
             padding: 15px;
             border-radius: 10px;
-            border-left: 4px solid var(--magenta);
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
 
-        .back-btn {
-            margin-top: 30px;
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .btn-download { background: #2ed573; }
+        .btn-download:hover { background: #26af5f; }
+        .btn-plugin { background: #ffa500; }
+        .btn-plugin:hover { background: #e09200; }
+
+        .back-link {
+            margin-top: 25px;
             color: #94a3b8;
             text-decoration: none;
-            font-size: 1rem;
-            transition: color 0.3s;
+            font-size: 0.95rem;
         }
-        .back-btn:hover { color: white; }
+        .back-link:hover { color: white; }
     </style>
 </head>
 <body>
 
     <div class="title-top">ZyrClient</div>
 
-    <div class="frame-card">
-        <div class="brand-section">
+    <div class="main-card">
+        <div class="brand-header">
             <i class="fab fa-tiktok"></i>
-            <h2>TikTok</h2>
+            <h2>Tiktok</h2>
         </div>
 
-        <div class="input-group">
-            <input type="text" id="tiktokUrl" placeholder="Tempel URL TikTok di sini...">
-            <button id="downloadBtn" onclick="fetchTikTokData()">Download</button>
+        <div class="input-box">
+            <input type="text" id="targetUrl" placeholder="Masukkan link VT / Tiktok yang ingin dituju...">
+            <button class="btn-take" id="takeBtn" onclick="executeTake()">Take</button>
         </div>
 
-        <div class="infotd" id="infoPanel">
-            
+        <div class="infotd" id="infotdPanel">
             <div class="video-container">
-                <video id="videoPlayer" controls autoplay name="media"></video>
-            </div>
-            
-            <div class="username">
-                <i class="fas fa-user-circle"></i> <span id="usernameVal">@username</span>
+                <video id="zrVideo" controls></video>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <i class="fas fa-heart"></i>
-                    <span><strong id="likeVal">0</strong></span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-comment"></i>
-                    <span><strong id="commentVal">0</strong></span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-bookmark"></i>
-                    <span><strong id="favVal">0</strong></span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-share"></i>
-                    <span><strong id="shareVal">0</strong></span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-users"></i>
-                    <span><strong id="viewVal">0</strong></span>
-                </div>
+            <div class="username">
+                <i class="fas fa-user-circle"></i> <span id="zrUser">@username</span>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-box"><i class="fas fa-heart"></i> Like: <span id="zrLike">0</span></div>
+                <div class="stat-box"><i class="fas fa-comment"></i> Komentar: <span id="zrComment">0</span></div>
+                <div class="stat-box"><i class="fas fa-star"></i> Favorit: <span id="zrFav">0</span></div>
+                <div class="stat-box"><i class="fas fa-share"></i> Share: <span id="zrShare">0</span></div>
+                <div class="stat-box"><i class="fas fa-eye"></i> Views: <span id="zrViews">0</span></div>
             </div>
 
             <div class="caption-box">
-                <strong>Caption:</strong><br>
-                <span id="captionVal">Isi caption akan muncul di sini...</span>
+                <strong>Caption:</strong>
+                <p id="zrCaption">Text caption...</p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-action btn-download" onclick="downloadVideo()">
+                    <i class="fas fa-file-download"></i> Download Video (1080p No WM)
+                </button>
+                <button class="btn-action btn-plugin" onclick="downloadTiktokPlugin()">
+                    <i class="fas fa-code"></i> Download Plugin (.JS Function)
+                </button>
             </div>
         </div>
     </div>
 
-    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali ke Menu Utama</a>
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a>
 
     <script>
-        async function fetchTikTokData() {
-            const urlInput = document.getElementById('tiktokUrl').value.trim();
-            const btn = document.getElementById('downloadBtn');
-            const panel = document.getElementById('infoPanel');
+        let globalVideoUrl = "";
+        let rawDataCache = null;
 
-            if (!urlInput) {
-                alert('Tolong masukkan link TikTok yang ingin diunduh.');
-                return;
-            }
+        async function executeTake() {
+            const url = document.getElementById('targetUrl').value.trim();
+            const takeBtn = document.getElementById('takeBtn');
+            const panel = document.getElementById('infotdPanel');
 
-            btn.disabled = true;
-            btn.innerText = 'Mengambil Data...';
+            if(!url) return alert('Masukkan link TikTok valid!');
+            
+            takeBtn.disabled = true;
+            takeBtn.innerText = 'Mengambil Data API...';
 
             try {
-                // Endpoint gratis menggunakan TikWM API yang merespon dengan format JSON
-                const apiFetch = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(urlInput)}`);
-                const response = await apiFetch.json();
+                // Integrasi Engine API Tikwm Publik
+                const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
+                const json = await res.json();
 
-                if (response.code === 0 && response.data) {
-                    const data = response.data;
+                if(json.code === 0 && json.data) {
+                    const vData = json.data;
+                    rawDataCache = vData;
+                    globalVideoUrl = vData.play; // HD No Watermark Link
 
-                    // 1. Memasukkan sumber video (Tanpa Watermark)
-                    document.getElementById('videoPlayer').src = data.play;
+                    document.getElementById('zrVideo').src = globalVideoUrl;
+                    document.getElementById('zrUser').innerText = `@${vData.author.unique_id}`;
+                    document.getElementById('zrLike').innerText = vData.digg_count.toLocaleString();
+                    document.getElementById('zrComment').innerText = vData.comment_count.toLocaleString();
+                    document.getElementById('zrFav').innerText = vData.collect_count.toLocaleString();
+                    document.getElementById('zrShare').innerText = vData.share_count.toLocaleString();
+                    document.getElementById('zrViews').innerText = vData.play_count.toLocaleString();
+                    document.getElementById('zrCaption').innerText = vData.title || 'No Caption';
 
-                    // 2. Mengambil data username
-                    document.getElementById('usernameVal').innerText = `@${data.author.unique_id}`;
-
-                    // 3. Mengambil statistik video (diformat dengan pemisah ribuan)
-                    document.getElementById('likeVal').innerText = data.digg_count.toLocaleString('id-ID');
-                    document.getElementById('commentVal').innerText = data.comment_count.toLocaleString('id-ID');
-                    document.getElementById('favVal').innerText = data.collect_count.toLocaleString('id-ID'); // Collect = Favorit
-                    document.getElementById('shareVal').innerText = data.share_count.toLocaleString('id-ID');
-                    document.getElementById('viewVal').innerText = data.play_count.toLocaleString('id-ID');
-
-                    // 4. Mengambil teks/caption
-                    document.getElementById('captionVal').innerText = data.title || 'Tidak ada deskripsi.';
-
-                    // Menampilkan panel infotd
                     panel.style.display = 'block';
                 } else {
-                    alert('Gagal mengambil data. Pastikan link video valid dan akun tidak di-private.');
+                    alert('Gagal mengambil data struktur video. Pastikan link benar!');
                 }
             } catch (err) {
-                alert('Kesalahan sistem atau masalah koneksi internet.');
-                console.error(err);
+                alert('Gangguan respon API internal.');
             } finally {
-                btn.disabled = false;
-                btn.innerText = 'Download';
+                takeBtn.disabled = false;
+                takeBtn.innerText = 'Take';
             }
+        }
+
+        function downloadVideo() {
+            if(!globalVideoUrl) return;
+            const a = document.createElement('a');
+            a.href = globalVideoUrl;
+            a.download = `ZyrClient_1080p_${Date.now()}.mp4`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function downloadTiktokPlugin() {
+            // Script template fungsi murni siap pakai untuk bot WA, Script, Web lain
+            const scriptCode = `/**
+ * ZyrClient - TikTok Downloader Module Plugin
+ * Bersifat Universal: Bisa digunakan di Bot WhatsApp, Web, App & Plugin
+ */
+async function fetchZyrTiktok(targetUrl) {
+    try {
+        const response = await fetch(\`https://www.tikwm.com/api/?url=\${encodeURIComponent(targetUrl)}\`);
+        const result = await response.json();
+        if(result.code === 0) {
+            const node = result.data;
+            return {
+                status: true,
+                username: node.author.unique_id,
+                nickname: node.author.nickname,
+                video_1080p_no_wm: node.play,
+                likes: node.digg_count,
+                comments: node.comment_count,
+                favorites: node.collect_count,
+                shares: node.share_count,
+                views: node.play_count,
+                caption: node.title
+            };
+        }
+        return { status: false, message: "Data tak ditemukan" };
+    } catch (e) {
+        return { status: false, error: e.message };
+    }
+}`;
+            const blob = new Blob([scriptCode], { type: 'text/javascript' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'zyr-tiktok-plugin.js';
+            link.click();
         }
     </script>
 </body>

@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - </title>
+    <title>ZyrClient</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* Tema warna: Biru tua, Biru, dan Magenta */
-            --bg-gradient: linear-gradient(135deg, #0f172a, #1e3a8a, #d946ef, #2563eb);
+            --bg-gradient: linear-gradient(135deg, #0b0f19, #1e1b4b, #1e3a8a);
             --primary-blue: #3b82f6;
-            --dark-blue: #1d4ed8; /* Biru tua tidak terlalu gelap */
+            --dark-blue: #1e3a8a;
             --magenta: #d946ef;
+            --card-bg: rgba(30, 58, 138, 0.4);
             --text-light: #f8fafc;
         }
 
@@ -19,7 +19,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
 
         body {
@@ -29,112 +29,152 @@
             color: var(--text-light);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
             position: relative;
+            overflow-x: hidden;
         }
 
-        /* Animasi Gelombang Background */
         @keyframes gradientWave {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Elemen Gelombang Visual Tambahan */
-        .wave-bottom {
+        /* Gelombang Animasi Background */
+        .ocean {
+            height: 15%;
+            width: 100%;
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 200%;
-            height: 150px;
-            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="rgba(255,255,255,0.05)" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
-            animation: waveMove 15s linear infinite;
+            background: none;
+            opacity: 0.15;
+            pointer-events: none;
         }
-
-        @keyframes waveMove {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        .wave {
+            background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg') repeat-x;
+            position: absolute;
+            top: -55px;
+            width: 6400px;
+            height: 198px;
+            animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+            transform: translate3d(0, 0, 0);
+        }
+        @keyframes wave {
+            0% { margin-left: 0; }
+            100% { margin-left: -1600px; }
         }
 
         .container {
+            width: 90%;
+            max-width: 900px;
             text-align: center;
-            z-index: 10;
+            z-index: 5;
             padding: 20px;
-            width: 100%;
-            max-width: 700px; /* Lebar frame yang proporsional */
         }
 
-        .title {
+        h1 {
             font-size: 4.5rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            background: linear-gradient(to right, #60a5fa, #d946ef);
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, var(--primary-blue), var(--magenta));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
         }
 
         .subtitle {
-            font-size: 1.3rem;
-            color: #cbd5e1;
+            font-size: 1.25rem;
+            color: #94a3b8;
             margin-bottom: 50px;
-            line-height: 1.5;
         }
 
-        /* Panel Menu TikTok */
-        .panel-menu {
-            background: rgba(29, 78, 216, 0.6); /* Biru tua transparan */
-            backdrop-filter: blur(10px);
-            width: 100%;
-            max-width: 450px;
-            padding: 30px;
+        /* Panel Menu Grid */
+        .panel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .panel-card {
+            background: var(--card-bg);
+            border: 2px solid rgba(59, 130, 246, 0.3);
             border-radius: 20px; /* Persegi panjang ujung bulat */
-            border: 2px solid rgba(96, 165, 250, 0.4);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 30px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 15px;
+            gap: 20px;
             text-decoration: none;
             color: var(--text-light);
-            margin: 0 auto;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
         }
 
-        .panel-menu:hover {
-            transform: translateY(-5px);
+        .panel-card:hover {
+            transform: translateY(-8px);
             border-color: var(--magenta);
-            box-shadow: 0 12px 25px rgba(217, 70, 239, 0.4);
-            background: rgba(37, 99, 235, 0.8);
+            background: rgba(30, 58, 138, 0.7);
+            box-shadow: 0 15px 35px rgba(217, 70, 239, 0.25);
         }
 
-        .panel-menu i {
+        .panel-card i {
             font-size: 3rem;
+            background: linear-gradient(45deg, #fff, var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .panel-menu span {
-            font-size: 1.8rem;
+        .panel-card.hd i {
+            background: linear-gradient(45deg, #fff, var(--magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .panel-info h3 {
+            font-size: 1.6rem;
             font-weight: 700;
+            text-align: left;
+            margin-bottom: 4px;
+        }
+
+        .panel-info p {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            text-align: left;
         }
     </style>
 </head>
 <body>
 
-    <div class="wave-bottom"></div>
+    <div class="ocean">
+        <div class="wave"></div>
+    </div>
 
     <div class="container">
-        <h1 class="title">ZyrClient</h1>
+        <h1>ZyrClient</h1>
         <p class="subtitle">Selamat datang di ZyrClient, api fungsi gratis untuk downloader.</p>
 
-        <a href="TiktokD.html" class="panel-menu">
-            <i class="fab fa-tiktok"></i>
-            <span>TikTok</span>
-        </a>
+        <div class="panel-grid">
+            <a href="TiktokD.html" class="panel-card">
+                <i class="fab fa-tiktok"></i>
+                <div class="panel-info">
+                    <h3>Tiktok</h3>
+                    <p>Fungsi download video & instan tracking API.</p>
+                </div>
+            </a>
+
+            <a href="Hd.html" class="panel-card hd">
+                <i class="fas fa-image"></i>
+                <div class="panel-info">
+                    <h3>HD</h3>
+                    <p>Fungsi Upscaler resolusi gambar & video.</p>
+                </div>
+            </a>
+        </div>
     </div>
 
 </body>
