@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient</title>
+    <title>ZyrClient - WA Global</title>
     <style>
         :root { 
             --bg: linear-gradient(135deg, #0f172a, #1e3a8a, #4c1d95, #2563eb); 
@@ -171,11 +171,16 @@
         <button id="btnUpload" onclick="uploadToStory()">Upload ke Story WA</button>
     </div>
 
-    <a href="index.html" style="display:block; margin-top:20px; color:#cbd5e1; text-decoration:none;">&larr; Kembali</a>
+    <a href="index.html" style="display:block; margin-top:20px; color:#cbd5e1; text-decoration:none;">&larr; Kembali ke Utama</a>
 
     <script>
-        // MASUKKAN LINK HTTPS DARI PINGGY KAMU DI SINI (JANGAN PAKAI '/' DI AKHIR KATA)
+        // ⚠️ PENTING: Ganti link di bawah ini dengan link Pinggy kamu yang PALING BARU (Wajib pakai https://)
         const BACKEND_URL = "https://llhmd-140-213-158-138.run.pinggy-free.link";
+
+        // Fungsi bantu untuk memastikan URL bersih (tanpa garis miring di belakang)
+        const getBaseUrl = () => {
+            return BACKEND_URL.endsWith('/') ? BACKEND_URL.slice(0, -1) : BACKEND_URL;
+        };
 
         async function requestPairingCode() {
             const number = document.getElementById('waNumber').value.trim();
@@ -186,26 +191,25 @@
             if(!number) return alert("Masukkan nomor WhatsApp terlebih dahulu!");
             if(number.includes('+')) return alert("Masukkan nomor tanpa menggunakan tanda '+' !");
 
+            // Mode Loading
             btn.innerText = "Memproses...";
             btn.disabled = true;
             codeBox.innerText = "LOADING...";
-            statusBox.innerText = "CONNECTING TO BACKEND...";
+            statusBox.innerText = "CONNECTING TO SERVER...";
             statusBox.style.color = "#fbbf24";
 
             try {
-                // Bersihkan url jika ada slash di bagian akhir
-                const cleanUrl = BACKEND_URL.endsWith('/') ? BACKEND_URL.slice(0, -1) : BACKEND_URL;
-                
-                // Fetch dengan header khusus bypass halaman "Press Enter" milik Pinggy
-                const response = await fetch(`${cleanUrl}/api/connect?number=${number}`, {
+                // Menambahkan header khusus agar Pinggy tidak memblokir API kita
+                const response = await fetch(`${getBaseUrl()}/api/connect?number=${number}`, {
                     method: 'GET',
                     headers: {
+                        'Accept': 'application/json',
                         'x-pinggy-no-interstitial': 'true'
                     }
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`Server Error (Status: ${response.status})`);
+                    throw new Error(`Server memblokir request (Status: ${response.status})`);
                 }
                 
                 const data = await response.json();
@@ -219,13 +223,14 @@
                     statusBox.innerText = "CONNECTED (Sudah Terhubung)";
                     statusBox.style.color = "#25D366";
                 } else {
-                    throw new Error(data.message || "Gagal mendapatkan kode pairing");
+                    throw new Error(data.message || "Gagal mendapatkan kode.");
                 }
             } catch (error) {
                 codeBox.innerText = "ERROR";
+                // Tampilkan pesan error spesifik
                 statusBox.innerText = "GAGAL TERHUBUNG: " + error.message;
                 statusBox.style.color = "#ef4444";
-                console.error(error);
+                console.error("Fetch Error Detail:", error);
             } finally {
                 btn.innerText = "Login & Dapatkan Pairing Code";
                 btn.disabled = false;
@@ -249,13 +254,12 @@
                 const fileType = file.type.startsWith('image/') ? 'image' : 'video';
 
                 try {
-                    const cleanUrl = BACKEND_URL.endsWith('/') ? BACKEND_URL.slice(0, -1) : BACKEND_URL;
-                    
-                    const response = await fetch(`${cleanUrl}/api/upload-story`, {
+                    const response = await fetch(`${getBaseUrl()}/api/upload-story`, {
                         method: 'POST',
                         headers: { 
                             'Content-Type': 'application/json',
-                            'x-pinggy-no-interstitial': 'true' // Bypass halaman interstitial Pinggy
+                            'Accept': 'application/json',
+                            'x-pinggy-no-interstitial': 'true'
                         },
                         body: JSON.stringify({
                             media: base64Data,
@@ -263,15 +267,19 @@
                         })
                     });
                     
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error ${response.status}`);
+                    }
+
                     const resData = await response.json();
 
-                    if(response.ok && resData.status === "success") {
+                    if(resData.status === "success") {
                         alert("Berhasil! File telah terposting ke Story WhatsApp kamu.");
                     } else {
-                        alert("Gagal upload: " + (resData.message || "Ditolak oleh server"));
+                        alert("Gagal upload: " + (resData.message || "Ditolak server."));
                     }
                 } catch (error) {
-                    alert("Error saat mengirim file ke backend: " + error.message);
+                    alert("Gagal menghubungi server backend: " + error.message);
                 } finally {
                     btn.innerText = "Upload ke Story WA";
                     btn.disabled = false;
