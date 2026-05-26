@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memuat ZyrClient...</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            /* Background hitam kebiruan */
+            background: linear-gradient(135deg, #0b1320, #14283f, #1c3d5a);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: sans-serif;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px #00d2ff;
+        }
+        .progress-container {
+            width: 80%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 5px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+        .progress-bar {
+            height: 20px;
+            width: 0%; /* Dimulai dari 0 */
+            border-radius: 15px;
+            /* Warna dan tekstur ala Galaxy yang bergerak */
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5, #8a2387, #00d2ff);
+            background-size: 300% 300%;
+            animation: galaxy 3s ease infinite;
+            transition: width 0.1s linear;
+        }
+        @keyframes galaxy {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .percentage {
+            margin-top: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00d2ff;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ZyrClient</h1>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="bar"></div>
+    </div>
+    <div class="percentage" id="text">0%</div>
+
+    <script>
+        let progress = 0;
+        const bar = document.getElementById('bar');
+        const text = document.getElementById('text');
+        
+        // Timer untuk menambah persentase
+        const interval = setInterval(() => {
+            progress += 1;
+            bar.style.width = progress + '%';
+            text.innerText = progress + '%';
+            
+            // Jika sudah 100%, pindah ke index.html
+            if (progress >= 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    window.location.href = 'index.html'; // Pindah otomatis
+                }, 400); // Jeda sedikit agar angka 100% sempat terlihat
+            }
+        }, 25); // Kecepatan loading (25ms per 1%)
+    </script>
+
+</body>
+</html>
+
