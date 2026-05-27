@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Up Quality 1K - ZyrClient</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg-dark: #070a12; --ui-blue: #1e293b; --ui-blue-dark: #0f172a; --accent-green: #38ef7d; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-dark); color: #fff; padding: 40px 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, var(--ui-blue), var(--ui-blue-dark)); border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .back-btn { display: inline-block; color: var(--accent-green); text-decoration: none; margin-bottom: 20px; }
+        h1 { text-align: center; font-size: 2.2rem; }
+        .sub { text-align: center; color: var(--accent-green); margin-bottom: 25px; font-size: 1.1rem; }
+        .file-box { background: #0b0f19; padding: 30px; border-radius: 12px; border: 2px dashed rgba(255,255,255,0.1); text-align: center; margin-bottom: 20px; }
+        .file-box input { display: none; }
+        .file-label { cursor: pointer; color: #94a3b8; display: block; }
+        .file-label i { font-size: 2.5rem; margin-bottom: 10px; color: var(--accent-green); }
+        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .btn-up { background: var(--accent-green); color: #000; }
+        .result-panel { display: none; margin-top: 30px; text-align: center; }
+        .preview-frame { max-width: 100%; max-height: 350px; border-radius: 10px; margin: 15px 0; border: 2px solid var(--accent-green); }
+        .btn-dl { background: #00d2ff; color: #000; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+        <h1>ZyrClient</h1>
+        <div class="sub"><i class="fa-solid fa-cloud-arrow-up"></i> Up Quality 1K Engine</div>
+
+        <div class="file-box">
+            <input type="file" id="mediaFile" accept="image/*">
+            <label for="mediaFile" class="file-label" id="labelName">
+                <i class="fa-solid fa-file-image"></i>
+                <p>Klik untuk memilih file foto/gambar</p>
+            </label>
+        </div>
+
+        <button class="btn btn-up" onclick="processUpscale()"><i class="fa-solid fa-bolt"></i> Up Quality</button>
+
+        <div class="result-panel" id="resultContainer">
+            <h3>Hasil Penghdan 1K:</h3>
+            <img src="" class="preview-frame" id="outImage">
+            <button class="btn btn-dl" id="dlLink"><i class="fa-solid fa-download"></i> Download Hasil 1K</button>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('mediaFile');
+        fileInput.onchange = () => {
+            if(fileInput.files[0]) document.getElementById('labelName').querySelector('p').innerText = fileInput.files[0].name;
+        };
+
+        function processUpscale() {
+            const file = fileInput.files[0];
+            if(!file) return alert('Silakan pilih file media gambar terlebih dahulu!');
+
+            const btn = document.querySelector('.btn-up');
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Merestrukturisasi Matriks Gambar...';
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Memaksa pengkondisian skala resolusi tepat di batas 1024px (1K)
+                    const targetWidth = 1024;
+                    const scaleFactor = targetWidth / img.width;
+                    const targetHeight = img.height * scaleFactor;
+                    
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    
+                    // Konfigurasi anti-aliasing engine agar tetap tajam saat render paksa
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    
+                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+                    
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+                    document.getElementById('outImage').src = dataUrl;
+                    
+                    const dlBtn = document.getElementById('dlLink');
+                    dlBtn.onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = dataUrl;
+                        a.download = 'ZyrClient_1K_' + file.name;
+                        a.click();
+                    };
+                    
+                    document.getElementById('resultContainer').style.display = 'block';
+                    btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Up Quality';
+                    alert('Proses bypass kualitas 1K selesai!');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>
