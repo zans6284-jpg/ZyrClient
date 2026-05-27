@@ -13,10 +13,12 @@
         .sub-logo { font-size: 2.8rem; color: #ff0000; margin-bottom: 25px; }
         .app-card { width: 100%; max-width: 500px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(123, 44, 191, 0.2)); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
         .input-bar { width: 100%; padding: 14px 20px; background: rgba(0, 0, 0, 0.7); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 30px; color: #fff; font-size: 0.95rem; outline: none; margin-bottom: 15px; }
-        .btn-take { width: 100%; padding: 14px; background: linear-gradient(90deg, #ff0000, #7b2cbf); border: none; border-radius: 30px; color: #fff; font-weight: 600; cursor: pointer; }
+        .btn-take { width: 100%; padding: 14px; background: linear-gradient(90deg, #ff0000, #7b2cbf); border: none; border-radius: 30px; color: #fff; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-take:active { transform: scale(0.95); }
         .ytinfo-panel { display: none; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
-        .preview-box { width: 100%; height: 180px; background: rgba(0,0,0,0.5); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .meta-box { font-size: 0.85rem; color: #d1d5db; margin-bottom: 20px; }
+        .preview-box { width: 100%; height: 200px; background: rgba(0,0,0,0.5); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; position: relative;}
+        .preview-box img { width: 100%; height: 100%; object-fit: cover; }
+        .meta-box { font-size: 0.85rem; color: #d1d5db; margin-bottom: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border-left: 3px solid #ff0000;}
         .btn-dl-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn-dl { padding: 12px; border-radius: 30px; border: none; color: #fff; font-weight: 600; text-align: center; text-decoration: none; font-size: 0.9rem; }
         .btn-vid { background: #ff0000; }
@@ -28,15 +30,15 @@
     <div class="sub-logo"><i class="fab fa-youtube"></i></div>
     <div class="app-card">
         <input type="text" class="input-bar" id="ytUrl" placeholder="Masukkan Link YouTube...">
-        <button class="btn-take" onclick="loadYoutube()">Take</button>
+        <button class="btn-take" onclick="loadYoutube()">Take Video</button>
 
         <div class="ytinfo-panel" id="ytinfo">
-            <div class="preview-box">
+            <div class="preview-box" id="ytPreview">
                 <i class="fab fa-youtube" style="font-size: 3.5rem; color: rgba(255,0,0,0.5);"></i>
             </div>
             <div class="meta-box">
                 <p style="margin-bottom: 6px;"><strong>Link:</strong> <span id="outLink" style="color:#00f2fe; word-break: break-all;">-</span></p>
-                <p><strong>Caption:</strong> <span id="outCap">Media Stream Link Connected</span></p>
+                <p><strong>Status:</strong> <span id="outCap" style="color:#00ff80;">Ready to Download</span></p>
             </div>
             <div class="btn-dl-group">
                 <a href="#" class="btn-dl btn-vid" id="dlYt" target="_blank">Download Video Yt</a>
@@ -50,16 +52,24 @@
             const url = document.getElementById('ytUrl').value;
             if(!url) return alert('Input Link Kosong!');
             
-            const regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regex);
+            // Regex jitu untuk mengekstrak Video ID dari berbagai macam format URL YouTube
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/gi;
+            const match = regex.exec(url);
             
-            if(match && match[2].length === 11) {
+            if(match && match[1]) {
+                const videoId = match[1];
                 document.getElementById('outLink').innerText = url;
+                document.getElementById('outCap').innerText = "Media Stream Connected (ID: " + videoId + ")";
+                
+                // Menarik Thumbnail High Quality dari server Google
+                document.getElementById('ytPreview').innerHTML = `<img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Thumbnail">`;
+                
+                // Mengarahkan ke API pihak ketiga untuk eksekusi file
                 document.getElementById('dlYt').href = `https://9xbuddy.com/process?url=${encodeURIComponent(url)}`;
                 document.getElementById('dlMp3').href = `https://320ytmp3.com/convert?url=${encodeURIComponent(url)}`;
                 document.getElementById('ytinfo').style.display = 'block';
             } else {
-                alert('Tautan YouTube tidak valid!');
+                alert('Tautan YouTube tidak valid! Pastikan kamu menyalin link dengan benar.');
             }
         }
     </script>
