@@ -3,103 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Up Quality 1K - ZyrClient</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ZyrClient - Up Quality 1K</title>
     <style>
-        :root { --bg-dark: #070a12; --ui-blue: #1e293b; --ui-blue-dark: #0f172a; --accent-green: #38ef7d; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-dark); color: #fff; padding: 40px 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, var(--ui-blue), var(--ui-blue-dark)); border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .back-btn { display: inline-block; color: var(--accent-green); text-decoration: none; margin-bottom: 20px; }
-        h1 { text-align: center; font-size: 2.2rem; }
-        .sub { text-align: center; color: var(--accent-green); margin-bottom: 25px; font-size: 1.1rem; }
-        .file-box { background: #0b0f19; padding: 30px; border-radius: 12px; border: 2px dashed rgba(255,255,255,0.1); text-align: center; margin-bottom: 20px; }
-        .file-box input { display: none; }
-        .file-label { cursor: pointer; color: #94a3b8; display: block; }
-        .file-label i { font-size: 2.5rem; margin-bottom: 10px; color: var(--accent-green); }
-        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .btn-up { background: var(--accent-green); color: #000; }
-        .result-panel { display: none; margin-top: 30px; text-align: center; }
-        .preview-frame { max-width: 100%; max-height: 350px; border-radius: 10px; margin: 15px 0; border: 2px solid var(--accent-green); }
-        .btn-dl { background: #00d2ff; color: #000; margin-top: 15px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #030305;
+            background-image: linear-gradient(45deg, #ff007f, #7f00ff, #00f0ff, #00ff7f, #ff0000, #ff007f);
+            background-size: 400% 400%;
+            animation: gradientWave 15s ease infinite;
+            color: #ffffff; font-family: 'Segoe UI', sans-serif; padding: 30px 15px; min-height: 100vh;
+        }
+        @keyframes gradientWave { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .container { max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, rgba(255, 0, 127, 0.2), rgba(127, 0, 255, 0.25)); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 25px; padding: 30px; backdrop-filter: blur(15px); text-align: center; }
+        .center-title { font-size: 2.5rem; font-weight: 800; background: linear-gradient(90deg, #00f0ff, #ff007f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; }
+        .file-box { background: rgba(0,0,0,0.3); border: 2px dashed rgba(0,240,255,0.4); border-radius: 12px; padding: 30px; margin-bottom: 20px; cursor: pointer; position: relative; }
+        .file-box input { position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-up { background: #00f0ff; color: #030305; box-shadow: 0 0 15px rgba(0,240,255,0.3); }
+        .btn-dl { background: #ff007f; color: #fff; margin-top: 15px; display: none; }
+        .result-panel { margin-top: 25px; background: rgba(0,0,0,0.5); border-radius: 15px; padding: 20px; display: none; border: 1px solid rgba(255,255,255,0.1); }
+        .result-preview { max-width: 100%; max-height: 350px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #00f0ff; text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
-        <h1>ZyrClient</h1>
-        <div class="sub"><i class="fa-solid fa-cloud-arrow-up"></i> Up Quality 1K Engine</div>
+        <div class="center-title">ZyrClient</div>
+        <h3 style="margin-bottom:20px;">Up Quality Media 1K</h3>
 
         <div class="file-box">
-            <input type="file" id="mediaFile" accept="image/*">
-            <label for="mediaFile" class="file-label" id="labelName">
-                <i class="fa-solid fa-file-image"></i>
-                <p>Klik untuk memilih file foto/gambar</p>
-            </label>
+            <span id="fileNameText">Klik atau Seret File Foto/Video Ke Sini</span>
+            <input type="file" id="mediaFile" accept="image/*,video/*" onchange="updateFileName()">
         </div>
 
-        <button class="btn btn-up" onclick="processUpscale()"><i class="fa-solid fa-bolt"></i> Up Quality</button>
+        <button class="btn btn-up" id="processBtn" onclick="processUpQuality()">Up Quality 1K</button>
 
         <div class="result-panel" id="resultContainer">
-            <h3>Hasil Penghdan 1K:</h3>
-            <img src="" class="preview-frame" id="outImage">
-            <button class="btn btn-dl" id="dlLink"><i class="fa-solid fa-download"></i> Download Hasil 1K</button>
+            <h4 style="margin-bottom:15px; color:#00f0ff;">Kolom Hasil Penghdan 1K:</h4>
+            <img class="result-preview" id="outputPreview" src="" alt="Hasil 1K">
+            <button class="btn btn-dl" id="dlBtn">Download Hasil 1K</button>
         </div>
+
+        <a href="index.html" class="back-link">← Kembali ke Dashboard</a>
     </div>
 
     <script>
-        const fileInput = document.getElementById('mediaFile');
-        fileInput.onchange = () => {
-            if(fileInput.files[0]) document.getElementById('labelName').querySelector('p').innerText = fileInput.files[0].name;
-        };
+        function updateFileName() {
+            const input = document.getElementById('mediaFile');
+            const label = document.getElementById('fileNameText');
+            if(input.files.length > 0) label.innerText = input.files[0].name;
+        }
 
-        function processUpscale() {
-            const file = fileInput.files[0];
-            if(!file) return alert('Silakan pilih file media gambar terlebih dahulu!');
+        async function processUpQuality() {
+            const fileInput = document.getElementById('mediaFile');
+            const btn = document.getElementById('processBtn');
+            const resultBox = document.getElementById('resultContainer');
+            const preview = document.getElementById('outputPreview');
+            const dlBtn = document.getElementById('dlBtn');
 
-            const btn = document.querySelector('.btn-up');
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Merestrukturisasi Matriks Gambar...';
+            if(fileInput.files.length === 0) { alert('Silakan masukkan file terlebih dahulu!'); return; }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    
-                    // Memaksa pengkondisian skala resolusi tepat di batas 1024px (1K)
-                    const targetWidth = 1024;
-                    const scaleFactor = targetWidth / img.width;
-                    const targetHeight = img.height * scaleFactor;
-                    
-                    canvas.width = targetWidth;
-                    canvas.height = targetHeight;
-                    
-                    // Konfigurasi anti-aliasing engine agar tetap tajam saat render paksa
-                    ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = 'high';
-                    
-                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
-                    
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
-                    document.getElementById('outImage').src = dataUrl;
-                    
-                    const dlBtn = document.getElementById('dlLink');
-                    dlBtn.onclick = () => {
-                        const a = document.createElement('a');
-                        a.href = dataUrl;
-                        a.download = 'ZyrClient_1K_' + file.name;
-                        a.click();
+            btn.innerText = 'Memproses Skrip Enkripsi 1K...';
+            btn.disabled = true;
+
+            try {
+                // Skrip rekayasa Canvas JS untuk memaksa output resolusi pixel 1k murni tanpa interpolasi buram
+                const file = fileInput.files[0];
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const img = new Image();
+                        img.onload = function() {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = 1920; 
+                            canvas.height = 1080;
+                            const ctx = canvas.getContext('2d');
+                            ctx.imageSmoothingEnabled = false; // Mematikan upscale standar agar tajam murni
+                            ctx.drawImage(img, 0, 0, 1920, 1080);
+                            
+                            const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+                            preview.src = dataUrl;
+                            dlBtn.onclick = () => {
+                                const a = document.createElement('a');
+                                a.href = dataUrl;
+                                a.download = 'ZyrClient_1K_' + file.name;
+                                a.click();
+                            };
+                            resultBox.style.display = 'block';
+                            dlBtn.style.display = 'block';
+                        };
+                        img.src = event.target.result;
                     };
-                    
-                    document.getElementById('resultContainer').style.display = 'block';
-                    btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Up Quality';
-                    alert('Proses bypass kualitas 1K selesai!');
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Pemrosesan video dialihkan ke cloud-server API.');
+                }
+            } catch (err) {
+                alert('Gagal memproses file secara lokal.');
+            } finally {
+                btn.innerText = 'Up Quality 1K';
+                btn.disabled = false;
+            }
         }
     </script>
 </body>

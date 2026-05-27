@@ -3,87 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memuat ZyrClient...</title>
+    <title>ZyrClient - Loading</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            margin: 0;
-            padding: 0;
-            /* Background hitam kebiruan */
-            background: linear-gradient(135deg, #0b1320, #14283f, #1c3d5a);
+            background: #030305;
+            background-image: linear-gradient(45deg, #ff007f, #7f00ff, #00f0ff, #00ff7f, #ff0000, #ff007f);
+            background-size: 400% 400%;
+            animation: gradientWave 12s ease infinite;
             height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: white;
-            font-family: sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
         }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px #00d2ff;
-        }
-        .progress-container {
-            width: 80%;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 5px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
-        .progress-bar {
-            height: 20px;
-            width: 0%; /* Dimulai dari 0 */
-            border-radius: 15px;
-            /* Warna dan tekstur ala Galaxy yang bergerak */
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5, #8a2387, #00d2ff);
-            background-size: 300% 300%;
-            animation: galaxy 3s ease infinite;
-            transition: width 0.1s linear;
-        }
-        @keyframes galaxy {
+        @keyframes gradientWave {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        .main-container {
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.6s ease;
+        }
+        .fall-animation {
+            transform: translateY(100vh) scale(0.8);
+            opacity: 0;
+        }
+        .title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, #00f0ff, #ff007f, #7f00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            letter-spacing: 2px;
+        }
+        .progress-box {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            margin: 0 auto;
+            position: relative;
+        }
+        .progress-bar {
+            height: 16px;
+            width: 0%;
+            background: linear-gradient(90deg, #00f0ff, #ff007f);
+            border-radius: 50px;
+            box-shadow: 0 0 15px #ff007f;
+            position: relative;
+        }
         .percentage {
             margin-top: 15px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #00d2ff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
 <body>
 
-    <h1>ZyrClient</h1>
-    
-    <div class="progress-container">
-        <div class="progress-bar" id="bar"></div>
+    <div class="main-container" id="loadingWrapper">
+        <div class="title">ZyrClient</div>
+        <div class="progress-box">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="percentage" id="percentText">0%</div>
     </div>
-    <div class="percentage" id="text">0%</div>
 
     <script>
-        let progress = 0;
-        const bar = document.getElementById('bar');
-        const text = document.getElementById('text');
+        const progressBar = document.getElementById('progressBar');
+        const percentText = document.getElementById('percentText');
+        const loadingWrapper = document.getElementById('loadingWrapper');
         
-        // Timer untuk menambah persentase
-        const interval = setInterval(() => {
-            progress += 1;
-            bar.style.width = progress + '%';
-            text.innerText = progress + '%';
-            
-            // Jika sudah 100%, pindah ke index.html
-            if (progress >= 100) {
-                clearInterval(interval);
-                setTimeout(() => {
-                    window.location.href = 'index.html'; // Pindah otomatis
-                }, 400); // Jeda sedikit agar angka 100% sempat terlihat
-            }
-        }, 25); // Kecepatan loading (25ms per 1%)
-    </script>
+        let progress = 0;
+        const duration = 10000; // Minimal 10 Detik Pemuatan
+        const intervalTime = 100; 
+        const step = (100 / (duration / intervalTime));
 
+        const timer = setInterval(() => {
+            progress += step;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(timer);
+                
+                progressBar.style.width = '100%';
+                percentText.innerText = '100%';
+                
+                // Triger animasi jatuh sebelum pindah halaman
+                setTimeout(() => {
+                    loadingWrapper.classList.add('fall-animation');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 600);
+                }, 500);
+            } else {
+                progressBar.style.width = progress + '%';
+                percentText.innerText = Math.floor(progress) + '%';
+            }
+        }, intervalTime);
+    </script>
 </body>
 </html>
-

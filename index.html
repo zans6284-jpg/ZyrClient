@@ -3,167 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - Hub API & Fungsi Media Gratis</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ZyrClient - Dashboard API</title>
     <style>
-        :root {
-            --bg-dark: #070a12;
-            --ui-blue: #1e293b;
-            --ui-blue-dark: #0f172a;
-            --accent-cyan: #00d2ff;
-            --accent-magenta: #bd00ff;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: var(--bg-dark);
+            background: #030305;
+            background-image: linear-gradient(45deg, #ff007f, #7f00ff, #00f0ff, #00ff7f, #ff0000, #ff007f);
+            background-size: 400% 400%;
+            animation: gradientWave 15s ease infinite;
             color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
             min-height: 100vh;
+            padding: 40px 20px;
             overflow-y: auto;
-            position: relative;
         }
-
-        /* Animasi Gelombang Latar Belakang */
-        .wave-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden;
+        @keyframes gradientWave {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .wave {
-            position: absolute; width: 200%; height: 200%;
-            top: -50%; left: -50%;
-            border-radius: 43%;
-            background: linear-gradient(45deg, rgba(0,210,255,0.08) 0%, rgba(189,0,255,0.08) 100%);
-            animation: drift 15s infinite linear;
-        }
-        .wave:nth-child(2) {
-            animation: drift 25s infinite linear;
-            background: linear-gradient(135deg, rgba(0,210,255,0.05) 0%, rgba(189,0,255,0.05) 100%);
-        }
-
-        @keyframes drift {
-            from { transform: rotate(0deg); }
-            from { transform: rotate(360deg); }
-        }
-
-        header {
+        .header {
             text-align: center;
-            padding: 60px 20px 40px;
+            margin-bottom: 50px;
         }
-
-        header h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            background: linear-gradient(to right, var(--accent-cyan), var(--accent-magenta));
+        .header h1 {
+            font-size: 3.8rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #00f0ff, #ff007f);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
-            filter: drop-shadow(0 0 15px rgba(0,210,255,0.3));
         }
-
-        header p {
-            color: #94a3b8;
+        .header p {
             font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.75);
+            max-width: 600px;
+            margin: 0 auto;
         }
-
-        /* Grid Layout */
-        .panel-container {
-            max-width: 1000px;
-            margin: 0 auto padding: 0 20px 60px;
+        .panel-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
-        .card {
-            background: linear-gradient(135deg, var(--ui-blue), var(--ui-blue-dark));
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 18px;
-            padding: 30px 20px;
+        .panel-card {
+            background: linear-gradient(135deg, rgba(255, 0, 127, 0.25), rgba(127, 0, 255, 0.35));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 30px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            backdrop-filter: blur(15px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
         }
-
-        .card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
-            opacity: 0; transition: opacity 0.4s ease; z-index: 1;
+        .panel-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.4), 0 0 15px rgba(0, 240, 255, 0.2);
+            border-color: rgba(0, 240, 255, 0.5);
         }
-
-        .card:hover::before { opacity: 0.1; }
-
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 15px 30px rgba(0,210,255,0.2);
+        .icon-container {
+            width: 65px;
+            height: 65px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            background: linear-gradient(to bottom, #ffffff, #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            transition: transform 0.3s ease;
+        .icon-container svg {
+            width: 100%;
+            height: 100%;
+            fill: #ffffff;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
         }
-        
-        .card:hover .card-icon {
-            transform: scale(1.1);
-        }
-
-        /* Memberikan warna khusus ikon saat hover */
-        .card.tiktok:hover .card-icon { background: #00f2fe; -webkit-background-clip: text; }
-        .card.uplevel:hover .card-icon { background: #38ef7d; -webkit-background-clip: text; }
-        .card.remini:hover .card-icon { background: #ff4e50; -webkit-background-clip: text; }
-        .card.youtube:hover .card-icon { background: #ff0000; -webkit-background-clip: text; }
-
-        .card h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #f1f5f9;
+        .panel-title {
+            font-size: 1.4rem;
+            font-weight: 700;
             letter-spacing: 0.5px;
         }
     </style>
 </head>
 <body>
 
-    <div class="wave-container">
-        <div class="wave"></div>
-        <div class="wave"></div>
+    <div class="header">
+        <h1>ZyrClient</h1>
+        <p>Selamat datang di ZyrClient, api fungsi gratis untuk downloader.</p>
     </div>
 
-    <header>
-        <h1>ZyrClient</h1>
-        <p>Selamat datang di ZyrClient, API fungsi gratis untuk downloader & pengolah media.</p>
-    </header>
-
-    <main class="panel-container">
-        <div class="card tiktok" onclick="location.href='TiktokD.html'">
-            <div class="card-icon"><i class="fa-brands fa-tiktok"></i></div>
-            <h3>Tiktok Downloader</h3>
+    <div class="panel-grid">
+        <div class="panel-card" onclick="location.href='TiktokD.html'">
+            <div class="icon-container">
+                <svg viewBox="0 0 24 24"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.06-2.89-.52-4.06-1.39v7.57c.06 2.05-.6 4.19-2.11 5.59-1.68 1.64-4.22 2.27-6.49 1.7-2.39-.54-4.52-2.39-5.25-4.73-.85-2.58-.17-5.63 1.73-7.53 1.63-1.67 4.11-2.33 6.36-1.72V11c-1.39-.45-3.03-.13-4.1.84-1.14 1.01-1.51 2.69-1.02 4.13.43 1.39 1.73 2.47 3.19 2.59 1.62.19 3.28-.74 3.79-2.3.17-.46.22-.95.21-1.44V.02z"/></svg>
+            </div>
+            <div class="panel-title">Tiktok Downloader</div>
         </div>
 
-        <div class="card uplevel" onclick="location.href='Upq.html'">
-            <div class="card-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-            <h3>Up Quality 1K</h3>
+        <div class="panel-card" onclick="location.href='Upq.html'">
+            <div class="icon-container">
+                <svg viewBox="0 0 24 24"><path d="M4 20h16v2H4zm8-18l-8 8h5v6h6v-6h5z"/></svg>
+            </div>
+            <div class="panel-title">Up Quality</div>
         </div>
 
-        <div class="card remini" onclick="location.href='Reminihd.html'">
-            <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-            <h3>HD Remini Pro</h3>
+        <div class="panel-card" onclick="location.href='Reminihd.html'">
+            <div class="icon-container">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.3h7.6l-6.2 4.5 2.4 7.2-6.2-4.5-6.2 4.5 2.4-7.2-6.2-4.5h7.6zM12 6.5l-.9 2.8h-2.9l2.3 1.7-.9 2.7 2.4-1.7 2.3 1.7-.9-2.7 2.3-1.7h-2.9z"/></svg>
+            </div>
+            <div class="panel-title">Hd Remini</div>
         </div>
 
-        <div class="card youtube" onclick="location.href='Ytmp3.html'">
-            <div class="card-icon"><i class="fa-brands fa-youtube"></i></div>
-            <h3>YT MP3 Converter</h3>
+        <div class="panel-card" onclick="location.href='Ytmp3.html'">
+            <div class="icon-container">
+                <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </div>
+            <div class="panel-title">YT MP3</div>
         </div>
-    </main>
+    </div>
 
 </body>
 </html>
