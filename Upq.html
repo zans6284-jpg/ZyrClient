@@ -9,68 +9,67 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background: #000; color: #fff; min-height: 100vh; padding: 30px 15px; display: flex; flex-direction: column; align-items: center; }
-        .title-center { font-size: 2.2rem; font-weight: 700; background: linear-gradient(45deg, #ff007f, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; }
-        .app-box { width: 100%; max-width: 500px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(123, 44, 191, 0.25)); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
-        .file-zone { width: 100%; padding: 30px 20px; background: rgba(0,0,0,0.5); border: 2px dashed rgba(0, 242, 254, 0.4); border-radius: 12px; text-align: center; cursor: pointer; margin-bottom: 20px; }
-        .file-zone input { display: none; }
-        .btn-action { width: 100%; padding: 14px; background: linear-gradient(90deg, #ff007f, #7b2cbf); border: none; border-radius: 30px; color: #fff; font-weight: 600; cursor: pointer; margin-bottom: 25px; }
-        .output-box { display: none; width: 100%; text-align: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(0,242,254,0.2); }
-        .output-img { width: 100%; max-height: 300px; object-fit: contain; border-radius: 8px; margin-bottom: 15px; }
-        .btn-dl { display: inline-block; width: 100%; padding: 12px; background: #00f2fe; color: #000; font-weight: 600; border-radius: 30px; text-decoration: none; }
+        .title-main { font-size: 2.2rem; font-weight: 700; background: linear-gradient(45deg, #ff007f, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; }
+        .app-card { width: 100%; max-width: 480px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(123, 44, 191, 0.2)); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
+        .upload-zone { width: 100%; padding: 35px 15px; background: rgba(0,0,0,0.5); border: 2px dashed rgba(0, 242, 254, 0.4); border-radius: 12px; text-align: center; cursor: pointer; margin-bottom: 20px; }
+        .upload-zone input { display: none; }
+        .btn-proc { width: 100%; padding: 14px; background: linear-gradient(90deg, #ff007f, #7b2cbf); border: none; border-radius: 30px; color: #fff; font-weight: 600; cursor: pointer; margin-bottom: 20px; }
+        .output-panel { display: none; width: 100%; text-align: center; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid rgba(0,255,128,0.3); }
+        .img-res { width: 100%; max-height: 260px; object-fit: contain; border-radius: 8px; margin-bottom: 15px; }
+        .btn-download { display: block; width: 100%; padding: 12px; background: #00ff80; color: #000; font-weight: 600; border-radius: 30px; text-decoration: none; text-align: center; }
     </style>
 </head>
 <body>
-    <h1 class="title-center">ZyrClient</h1>
-    <div class="app-box">
-        <div class="file-zone" onclick="document.getElementById('fileInput').click()">
-            <i class="fas fa-cloud-upload-alt" style="font-size: 2.5rem; color: #00f2fe; margin-bottom: 10px;"></i>
-            <p id="uploadTxt">Pilih atau letakkan File Foto / Video</p>
-            <input type="file" id="fileInput" accept="image/*" onchange="previewFile()">
+    <h1 class="title-main">ZyrClient</h1>
+    <div class="app-card">
+        <div class="upload-zone" onclick="document.getElementById('fileIn').click()">
+            <i class="fas fa-file-image" style="font-size: 2.5rem; color: #00f2fe; margin-bottom: 10px;"></i>
+            <p id="labelIn">Masukkan file foto atau video</p>
+            <input type="file" id="fileIn" accept="image/*" onchange="handleFile()">
         </div>
-        <button class="btn-action" onclick="processQuality()">Up Quality to 1K</button>
+        <button class="btn-proc" onclick="executeUp()">Up</button>
 
-        <div class="output-box" id="outBox">
-            <p style="font-size: 0.9rem; color: #00ff80; margin-bottom: 10px;"><i class="fas fa-circle-check"></i> Hasil Penghdan 1K Terwujud</p>
-            <img class="output-img" id="outImg" src="">
-            <a href="#" class="btn-dl" id="dlBtn" download="ZyrClient_1K.png">Download Hasil</a>
+        <div class="output-panel" id="outBox">
+            <p style="font-size: 0.85rem; color: #00ff80; margin-bottom: 12px;"><i class="fas fa-circle-check"></i> Hasil Penghdan 1K</p>
+            <img class="img-res" id="imgTarget" src="">
+            <a href="#" class="btn-download" id="dlLink" download="ZyrClient_1K.png">Download</a>
         </div>
     </div>
 
     <script>
-        let fileData = null;
-        function previewFile() {
-            const file = document.getElementById('fileInput').files[0];
-            if(file) {
-                document.getElementById('uploadTxt').innerText = file.name;
-                const reader = new FileReader();
-                reader.onload = function(e) { fileData = e.target.result; }
-                reader.readAsDataURL(file);
+        let rawData = null;
+        function handleFile() {
+            const f = document.getElementById('fileIn').files[0];
+            if(f) {
+                document.getElementById('labelIn').innerText = f.name;
+                const r = new FileReader();
+                r.onload = (e) => { rawData = e.target.result; };
+                r.readAsDataURL(f);
             }
         }
-        function processQuality() {
-            if(!fileData) return alert('Pilih file terlebih dahulu!');
-            const btn = document.querySelector('.btn-action');
-            btn.innerText = 'Memproses Matrix Resampling Gambar...';
+        function executeUp() {
+            if(!rawData) return alert('Pilih berkas media!');
+            const b = document.querySelector('.btn-proc');
+            b.innerText = 'Memetakan Ulang Resolusi 1K...';
             
             setTimeout(() => {
                 const img = new Image();
-                img.src = fileData;
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = 1920; 
-                    canvas.height = 1080;
+                img.src = rawData;
+                img.onload = () => {
+                    const cvs = document.createElement('canvas');
+                    const ctx = cvs.getContext('2d');
+                    cvs.width = 1920; cvs.height = 1080;
                     ctx.imageSmoothingEnabled = true;
                     ctx.imageSmoothingQuality = 'high';
                     ctx.drawImage(img, 0, 0, 1920, 1080);
                     
-                    const result = canvas.toDataURL('image/png');
-                    document.getElementById('outImg').src = result;
-                    document.getElementById('dlBtn').href = result;
+                    const out = cvs.toDataURL('image/png');
+                    document.getElementById('imgTarget').src = out;
+                    document.getElementById('dlLink').href = out;
                     document.getElementById('outBox').style.display = 'block';
-                    btn.innerText = 'Up Quality to 1K';
-                }
-            }, 1500);
+                    b.innerText = 'Up';
+                };
+            }, 1200);
         }
     </script>
 </body>

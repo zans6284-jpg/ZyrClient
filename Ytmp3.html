@@ -9,65 +9,58 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background: #000; color: #fff; min-height: 100vh; padding: 30px 15px; display: flex; flex-direction: column; align-items: center; }
-        .title-top { font-size: 2.2rem; font-weight: 700; background: linear-gradient(45deg, #ff007f, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
-        .logo-yt { font-size: 3rem; color: #ff0000; margin-bottom: 25px; filter: drop-shadow(0 0 10px rgba(255,0,0,0.4)); }
-        .app-box { width: 100%; max-width: 550px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(123, 44, 191, 0.25)); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
-        .input-url { width: 100%; padding: 14px 20px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 30px; color: #fff; font-size: 0.95rem; outline: none; margin-bottom: 15px; }
-        .input-url:focus { border-color: #ff007f; }
-        .btn-action { width: 100%; padding: 14px; background: linear-gradient(90deg, #ff0000, #7b2cbf); border: none; border-radius: 30px; color: #fff; font-weight: 600; cursor: pointer; }
-        .yt-info-panel { display: none; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
-        .media-container { width: 100%; height: 200px; background: #111; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .info-meta { font-size: 0.9rem; margin-bottom: 15px; color: #cbd5e0; }
-        .dl-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn-dl { padding: 12px; border-radius: 30px; border: none; text-align: center; color: #fff; font-weight: 600; font-size: 0.9rem; cursor: pointer; text-decoration: none; }
-        .btn-video { background: #ff0000; }
-        .btn-audio { background: #00f2fe; color: #000; }
+        .title-top { font-size: 2.2rem; font-weight: 700; background: linear-gradient(45deg, #ff007f, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+        .sub-logo { font-size: 2.8rem; color: #ff0000; margin-bottom: 25px; }
+        .app-card { width: 100%; max-width: 500px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(123, 44, 191, 0.2)); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
+        .input-bar { width: 100%; padding: 14px 20px; background: rgba(0, 0, 0, 0.7); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 30px; color: #fff; font-size: 0.95rem; outline: none; margin-bottom: 15px; }
+        .btn-take { width: 100%; padding: 14px; background: linear-gradient(90deg, #ff0000, #7b2cbf); border: none; border-radius: 30px; color: #fff; font-weight: 600; cursor: pointer; }
+        .ytinfo-panel { display: none; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .preview-box { width: 100%; height: 180px; background: rgba(0,0,0,0.5); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .meta-box { font-size: 0.85rem; color: #d1d5db; margin-bottom: 20px; }
+        .btn-dl-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-dl { padding: 12px; border-radius: 30px; border: none; color: #fff; font-weight: 600; text-align: center; text-decoration: none; font-size: 0.9rem; }
+        .btn-vid { background: #ff0000; }
+        .btn-aud { background: #00f2fe; color: #000; }
     </style>
 </head>
 <body>
     <h1 class="title-top">ZyrClient</h1>
-    <div class="logo-yt"><i class="fab fa-youtube"></i></div>
+    <div class="sub-logo"><i class="fab fa-youtube"></i></div>
+    <div class="app-card">
+        <input type="text" class="input-bar" id="ytUrl" placeholder="Masukkan Link YouTube...">
+        <button class="btn-take" onclick="loadYoutube()">Take</button>
 
-    <div class="app-box">
-        <input type="text" class="input-url" id="ytUrl" placeholder="Masukkan Link YouTube Video...">
-        <button class="btn-action" onclick="processYoutube()">Take</button>
-
-        <div class="yt-info-panel" id="ytPanel">
-            <div class="media-container">
-                <i class="fab fa-youtube" style="font-size: 4rem; color: rgba(255,0,0,0.4);"></i>
+        <div class="ytinfo-panel" id="ytinfo">
+            <div class="preview-box">
+                <i class="fab fa-youtube" style="font-size: 3.5rem; color: rgba(255,0,0,0.5);"></i>
             </div>
-            <div class="info-meta">
-                <p><strong>Link:</strong> <span id="metaLink" style="color:#00f2fe;">-</span></p>
-                <p><strong>Caption:</strong> <span id="metaCap">YouTube Stream Resource Connection</span></p>
+            <div class="meta-box">
+                <p style="margin-bottom: 6px;"><strong>Link:</strong> <span id="outLink" style="color:#00f2fe; word-break: break-all;">-</span></p>
+                <p><strong>Caption:</strong> <span id="outCap">Media Stream Link Connected</span></p>
             </div>
-            <div class="dl-buttons">
-                <a href="#" class="btn-dl btn-video" id="dlYtVideo" target="_blank">Download Video Yt</a>
-                <a href="#" class="btn-dl btn-audio" id="dlYtMp3" target="_blank">Mp3</a>
+            <div class="btn-dl-group">
+                <a href="#" class="btn-dl btn-vid" id="dlYt" target="_blank">Download Video Yt</a>
+                <a href="#" class="btn-dl btn-aud" id="dlMp3" target="_blank">Mp3</a>
             </div>
         </div>
     </div>
 
     <script>
-        function processYoutube() {
+        function loadYoutube() {
             const url = document.getElementById('ytUrl').value;
-            if(!url) return alert('Masukkan link YouTube terlebih dahulu!');
+            if(!url) return alert('Input Link Kosong!');
             
-            document.getElementById('metaLink').innerText = url;
-            // Menggunakan pengalihan sistem konversi pihak ketiga yang andal tanpa gangguan CORS
-            const videoId = extractVideoId(url);
-            if(videoId) {
-                document.getElementById('dlYtVideo').href = `https://9xbuddy.com/process?url=${encodeURIComponent(url)}`;
-                document.getElementById('dlYtMp3').href = `https://320ytmp3.com/convert?url=${encodeURIComponent(url)}`;
-                document.getElementById('ytPanel').style.display = 'block';
+            const regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regex);
+            
+            if(match && match[2].length === 11) {
+                document.getElementById('outLink').innerText = url;
+                document.getElementById('dlYt').href = `https://9xbuddy.com/process?url=${encodeURIComponent(url)}`;
+                document.getElementById('dlMp3').href = `https://320ytmp3.com/convert?url=${encodeURIComponent(url)}`;
+                document.getElementById('ytinfo').style.display = 'block';
             } else {
-                alert('Format URL YouTube tidak valid!');
+                alert('Tautan YouTube tidak valid!');
             }
-        }
-
-        function extractVideoId(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
         }
     </script>
 </body>

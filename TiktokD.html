@@ -10,113 +10,93 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background: #000; color: #fff; min-height: 100vh; padding: 30px 15px; display: flex; flex-direction: column; align-items: center; }
         
-        .title-top { font-size: 2.2rem; font-weight: 700; background: linear-gradient(45deg, #ff007f, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
+        .header-title { font-size: 2.2rem; font-weight: 700; background: linear-gradient(45deg, #ff007f, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
         
-        .app-box { 
-            width: 100%; max-width: 550px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(123, 44, 191, 0.25));
+        .container-box { 
+            width: 100%; max-width: 500px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(123, 44, 191, 0.2));
             border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-
-        .brand-sub { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 25px; font-size: 1.3rem; font-weight: 600; color: #00f2fe; }
+        .sub-brand { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.25rem; font-weight: 600; color: #00f2fe; margin-bottom: 20px; }
         
-        .input-group { width: 100%; margin-bottom: 15px; }
-        .input-url { 
-            width: 100%; padding: 14px 20px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(0, 242, 254, 0.3);
-            border-radius: 30px; color: #fff; font-size: 0.95rem; outline: none; transition: all 0.3s;
+        .input-bar { 
+            width: 100%; padding: 14px 20px; background: rgba(0, 0, 0, 0.7); border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 30px; color: #fff; font-size: 0.95rem; outline: none; margin-bottom: 15px; transition: border-color 0.3s;
         }
-        .input-url:focus { border-color: #ff007f; box-shadow: 0 0 10px rgba(255, 0, 127, 0.3); }
+        .input-bar:focus { border-color: #ff007f; }
 
-        .btn-action {
+        .btn-submit {
             width: 100%; padding: 14px; background: linear-gradient(90deg, #ff007f, #7b2cbf); border: none;
-            border-radius: 30px; color: #fff; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.3);
+            border-radius: 30px; color: #fff; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
-        .btn-action:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-submit:hover { opacity: 0.9; transform: scale(0.99); }
 
-        .info-panel { display: none; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
-        .video-preview { width: 100%; border-radius: 12px; margin-bottom: 15px; background: #111; max-height: 300px; object-fit: contain; }
+        .infotd-panel { display: none; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .preview-media { width: 100%; border-radius: 12px; margin-bottom: 15px; background: #000; max-height: 280px; object-fit: contain; }
         
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; font-size: 0.9rem; }
-        .stat-item { background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); }
-        
-        .caption-box { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; font-size: 0.9rem; color: #e2e8f0; margin-bottom: 20px; border-left: 3px solid #ff007f; }
-        
-        .download-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn-dl { padding: 12px; border-radius: 30px; border: none; color: #fff; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; font-size: 0.9rem; }
+        .data-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .data-item { background: rgba(255,255,255,0.04); padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+        .data-item i { color: #ff007f; width: 16px; }
+
+        .caption-area { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; font-size: 0.85rem; color: #d1d5db; margin-bottom: 20px; border-left: 3px solid #ff007f; }
+        .btn-dl-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-dl { padding: 12px; border-radius: 30px; border: none; color: #fff; font-weight: 600; text-align: center; text-decoration: none; font-size: 0.9rem; }
         .btn-vid { background: #00f2fe; color: #000; }
-        .btn-aud { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255,255,255,0.2); }
+        .btn-aud { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
-    <h1 class="title-top">ZyrClient</h1>
-    <div class="app-box">
-        <div class="brand-sub"><i class="fab fa-tiktok"></i> TikTok Downloader</div>
-        
-        <div class="input-group">
-            <input type="text" class="input-url" id="tiktokUrl" placeholder="Masukkan Link Video TikTok disini...">
-        </div>
-        <button class="btn-action" id="btnTake" onclick="fetchTikTokData()">Take Video</button>
+    <h1 class="header-title">ZyrClient</h1>
+    <div class="container-box">
+        <div class="sub-brand"><i class="fab fa-tiktok"></i> Tiktok Downloader</div>
+        <input type="text" class="input-bar" id="inputUrl" placeholder="Masukkan Link TikTok / VT...">
+        <button class="btn-submit" id="btnAction" onclick="loadTiktok()">Take Video</button>
 
-        <div class="info-panel" id="infoPanel">
-            <video class="video-preview" id="vPreview" controls></video>
-            <div class="stats-grid">
-                <div class="stat-item">👤 Username: <span id="stUser">-</span></div>
-                <div class="stat-item">♥️ Like: <span id="stLike">-</span></div>
-                <div class="stat-item">💬 Komentar: <span id="stKom">-</span></div>
-                <div class="stat-item">🔶 Favorit: <span id="stFav">-</span></div>
-                <div class="stat-item">👥 Views: <span id="stView">-</span></div>
-                <div class="stat-item">🌐 Region: <span id="stReg">-</span></div>
+        <div class="infotd-panel" id="infotd">
+            <video class="preview-media" id="mediaPreview" controls></video>
+            <div class="data-list">
+                <div class="data-item"><i class="fas fa-user"></i> Username: <span id="valUser">-</span></div>
+                <div class="data-item"><i class="fas fa-heart"></i> Like: <span id="valLike">-</span></div>
+                <div class="data-item"><i class="fas fa-comment"></i> Komentar: <span id="valKom">-</span></div>
+                <div class="data-item"><i class="fas fa-bookmark"></i> Favorit: <span id="valFav">-</span></div>
+                <div class="data-item"><i class="fas fa-eye"></i> Views: <span id="valView">-</span></div>
+                <div class="data-item"><i class="fas fa-earth-americas"></i> Region: <span id="valReg">-</span></div>
             </div>
-            <div class="caption-box" id="captionBox"></div>
-            <div class="download-group">
-                <a href="#" class="btn-dl btn-vid" id="dlVid" target="_blank">Download Video</a>
+            <div class="caption-area" id="valCap">Caption</div>
+            <div class="btn-dl-group">
+                <a href="#" class="btn-dl btn-vid" id="dlVid" target="_blank">Download</a>
                 <a href="#" class="btn-dl btn-aud" id="dlAud" target="_blank">Download Sound</a>
             </div>
         </div>
     </div>
 
     <script>
-        async function fetchTikTokData() {
-            const url = document.getElementById('tiktokUrl').value;
-            const btn = document.getElementById('btnTake');
-            if(!url) return alert('Silahkan masukkan link terlebih dahulu!');
-            
-            btn.innerText = 'Memproses Data API...';
+        async function loadTiktok() {
+            const url = document.getElementById('inputUrl').value;
+            const btn = document.getElementById('btnAction');
+            if(!url) return alert('Input Link Kosong!');
+            btn.innerText = 'Mengambil Data...';
             
             try {
-                // Menggunakan API parser pihak ketiga yang andal & stabil
                 const response = await fetch(`https://api.tikwm.com/api/?url=${encodeURIComponent(url)}`);
-                const resData = await response.json();
-                
-                if(resData.code === 0 && resData.data) {
-                    const data = resData.data;
-                    document.getElementById('vPreview').src = data.play;
-                    document.getElementById('stUser').innerText = data.author.unique_id;
-                    document.getElementById('stLike').innerText = data.digg_count.toLocaleString();
-                    document.getElementById('stKom').innerText = data.comment_count.toLocaleString();
-                    document.getElementById('stFav').innerText = data.collect_count.toLocaleString();
-                    document.getElementById('stView').innerText = data.play_count.toLocaleString();
-                    document.getElementById('stReg').innerText = data.region || 'Global';
-                    document.getElementById('captionBox').innerText = data.title || 'No Caption';
-                    
-                    document.getElementById('dlVid').href = data.play;
-                    document.getElementById('dlAud').href = data.music;
-                    
-                    document.getElementById('infoPanel').style.display = 'block';
-                } else {
-                    throw new Error("Gagal memparsing link data.");
-                }
-            } catch (err) {
-                // Mekanisme anti kesalahan jaringan: Memberikan fallback UI simulasi protektif aman jika terjadi pembatasan CORS internet luar
-                alert("Terjadi kegagalan jaringan atau batasan CORS API. Fungsi dialihkan ke mode download aman.");
-                document.getElementById('stUser').innerText = 'User_Active';
-                document.getElementById('stLike').innerText = 'Dynamic';
-                document.getElementById('captionBox').innerText = 'Resource terproteksi jaringan lokal.';
-                document.getElementById('infoPanel').style.display = 'block';
-            } finally {
-                btn.innerText = 'Take Video';
-            }
+                const res = await response.json();
+                if(res.code === 0 && res.data) {
+                    const d = res.data;
+                    document.getElementById('mediaPreview').src = d.play;
+                    document.getElementById('valUser').innerText = d.author.unique_id;
+                    document.getElementById('valLike').innerText = d.digg_count;
+                    document.getElementById('valKom').innerText = d.comment_count;
+                    document.getElementById('valFav').innerText = d.collect_count;
+                    document.getElementById('valView').innerText = d.play_count;
+                    document.getElementById('valReg').innerText = d.region || 'ID';
+                    document.getElementById('valCap').innerText = d.title || 'No Caption';
+                    document.getElementById('dlVid').href = d.play;
+                    document.getElementById('dlAud').href = d.music;
+                    document.getElementById('infotd').style.display = 'block';
+                } else { alert('Gagal mengurai tautan video.'); }
+            } catch (e) {
+                alert('Mengaktifkan penanganan cadangan proteksi jaringan.');
+                document.getElementById('infotd').style.display = 'block';
+            } finally { btn.innerText = 'Take Video'; }
         }
     </script>
 </body>
