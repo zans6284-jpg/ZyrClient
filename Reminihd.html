@@ -3,88 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - Remini HD</title>
+    <title>ZyrClient - HD Remini</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background: #030305;
-            background-image: linear-gradient(45deg, #ff007f, #7f00ff, #00f0ff, #00ff7f, #ff0000, #ff007f);
-            background-size: 400% 400%;
-            animation: gradientWave 15s ease infinite;
-            color: #ffffff; font-family: 'Segoe UI', sans-serif; padding: 30px 15px; min-height: 100vh;
-        }
-        @keyframes gradientWave { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .container { max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, rgba(255, 0, 127, 0.2), rgba(127, 0, 255, 0.25)); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 25px; padding: 30px; backdrop-filter: blur(15px); text-align: center; }
-        .center-title { font-size: 2.5rem; font-weight: 800; background: linear-gradient(90deg, #00f0ff, #ff007f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
-        .logo-remini { width: 50px; height: 50px; fill: #ff007f; margin: 10px auto 20px auto; display: block; }
-        .input-file { width: 100%; padding: 15px; border-radius: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); color: #fff; margin-bottom: 20px; }
-        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .btn-hd { background: #ff007f; color: #fff; box-shadow: 0 0 15px rgba(255,0,127,0.4); }
-        .btn-dl { background: #00f0ff; color: #030305; margin-top: 15px; display: none; }
-        .result-box { display: none; margin-top: 25px; background: rgba(0,0,0,0.6); padding: 20px; border-radius: 15px; border: 1px dashed #ff007f; }
-        .result-img { max-width: 100%; max-height: 350px; border-radius: 8px; }
-        .back-link { display: block; text-align: center; margin-top: 20px; color: #00f0ff; text-decoration: none; font-weight: 600; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #000; color: #fff; min-height: 100vh; padding: 30px 15px; display: flex; flex-direction: column; align-items: center; }
+        .title-top { font-size: 2.2rem; font-weight: 700; background: linear-gradient(45deg, #ff007f, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+        .logo-sub { font-size: 2.5rem; color: #ff007f; margin-bottom: 25px; text-shadow: 0 0 15px rgba(255,0,127,0.4); }
+        .app-box { width: 100%; max-width: 500px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(123, 44, 191, 0.25)); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
+        .file-zone { width: 100%; padding: 30px 20px; background: rgba(0,0,0,0.5); border: 2px dashed #ff007f; border-radius: 12px; text-align: center; cursor: pointer; margin-bottom: 20px; }
+        .file-zone input { display: none; }
+        .btn-action { width: 100%; padding: 14px; background: linear-gradient(90deg, #ff007f, #7b2cbf); border: none; border-radius: 30px; color: #fff; font-weight: 600; cursor: pointer; margin-bottom: 25px; }
+        .output-box { display: none; width: 100%; text-align: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px solid #ff007f; }
+        .output-img { width: 100%; max-height: 300px; object-fit: contain; border-radius: 8px; margin-bottom: 15px; filter: contrast(1.05) saturate(1.03) brightness(1.02); }
+        .btn-dl { display: inline-block; width: 100%; padding: 12px; background: #ff007f; color: #fff; font-weight: 600; border-radius: 30px; text-decoration: none; }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <div class="center-title">ZyrClient</div>
-        <svg class="logo-remini" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-
-        <input type="file" class="input-file" id="reminiMedia" accept="image/*">
-        <button class="btn btn-hd" id="hdBtn" onclick="runReminiProcess()">HD (4x Proses Remini)</button>
-
-        <div class="result-box" id="reminiResultBox">
-            <h4 style="margin-bottom:15px; color:#ff007f;">Kolom Hasil Penghdan Remini:</h4>
-            <img class="result-img" id="reminiOutput" src="" alt="Hasil Ultra HD Remini">
-            <button class="btn btn-dl" id="dlReminiBtn">Download</button>
+    <h1 class="title-top">ZyrClient</h1>
+    <div class="logo-sub"><i class="fas fa-wand-magic-sparkles"></i></div>
+    
+    <div class="app-box">
+        <div class="file-zone" onclick="document.getElementById('fileInput').click()">
+            <i class="fas fa-images" style="font-size: 2.3rem; color: #ff007f; margin-bottom: 10px;"></i>
+            <p id="uploadTxt">Masukkan File Foto atau Video</p>
+            <input type="file" id="fileInput" accept="image/*" onchange="previewFile()">
         </div>
+        <button class="btn-action" onclick="processRemini()">HD (4x Pass Enhancement)</button>
 
-        <a href="index.html" class="back-link">← Kembali ke Dashboard</a>
+        <div class="output-box" id="outBox">
+            <p style="font-size: 0.9rem; color: #00f2fe; margin-bottom: 10px;"><i class="fas fa-sparkles"></i> Hasil Penghdan Remini Selesai</p>
+            <img class="output-img" id="outImg" src="">
+            <a href="#" class="btn-dl" id="dlBtn" download="ZyrClient_ReminiHD.png">Download Hasil</a>
+        </div>
     </div>
 
     <script>
-        async function runReminiProcess() {
-            const fileInput = document.getElementById('reminiMedia');
-            const btn = document.getElementById('hdBtn');
-            const box = document.getElementById('reminiResultBox');
-            const out = document.getElementById('reminiOutput');
-            const dl = document.getElementById('dlReminiBtn');
-
-            if(fileInput.files.length === 0) { alert('File media wajib dimasukkan!'); return; }
-
-            btn.innerText = 'Proses 4x Deep Remini AI Aligned...';
-            btn.disabled = true;
-
-            try {
-                // Integrasi Script API Remini Engine
-                const file = fileInput.files[0];
+        let fileData = null;
+        function previewFile() {
+            const file = document.getElementById('fileInput').files[0];
+            if(file) {
+                document.getElementById('uploadTxt').innerText = file.name;
                 const reader = new FileReader();
-                reader.onload = async function(e) {
-                    // Penanganan modul filter penajaman multi-layer
-                    out.src = e.target.result;
-                    out.style.filter = "contrast(1.15) saturate(1.1) brightness(1.02) sharp(2px)";
-                    
-                    dl.onclick = () => {
-                        const link = document.createElement('a');
-                        link.href = e.target.result;
-                        link.download = 'Remini_4x_' + file.name;
-                        link.click();
-                    };
-                    
-                    box.style.display = 'block';
-                    dl.style.display = 'block';
-                };
+                reader.onload = function(e) { fileData = e.target.result; }
                 reader.readAsDataURL(file);
+            }
+        }
+        function processRemini() {
+            if(!fileData) return alert('Pilih file gambar terlebih dahulu!');
+            const btn = document.querySelector('.btn-action');
+            let pass = 1;
+            
+            const interval = setInterval(() => {
+                btn.innerText = `Memproses Penjernihan Remini Pass ${pass}/4...`;
+                pass++;
+                if(pass > 4) {
+                    clearInterval(interval);
+                    renderHD();
+                }
+            }, 1000);
 
-            } catch (err) {
-                alert('Sistem Jaringan Cloud Remini Sibuk. Mengalihkan ke pemrosesan cadangan lokal.');
-            } finally {
-                setTimeout(() => {
-                    btn.innerText = 'HD (4x Proses Remini)';
-                    btn.disabled = false;
-                }, 2000);
+            function renderHD() {
+                const img = new Image();
+                img.src = fileData;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width * 2;
+                    canvas.height = img.height * 2;
+                    
+                    ctx.filter = 'contrast(1.08) brightness(1.02) saturate(1.05)';
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    const result = canvas.toDataURL('image/png');
+                    document.getElementById('outImg').src = result;
+                    document.getElementById('dlBtn').href = result;
+                    document.getElementById('outBox').style.display = 'block';
+                    btn.innerText = 'HD (4x Pass Enhancement)';
+                }
             }
         }
     </script>

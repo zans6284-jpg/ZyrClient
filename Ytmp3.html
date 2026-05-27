@@ -3,91 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - YT Downloader & MP3</title>
+    <title>ZyrClient - YouTube MP3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background: #030305;
-            background-image: linear-gradient(45deg, #ff007f, #7f00ff, #00f0ff, #00ff7f, #ff0000, #ff007f);
-            background-size: 400% 400%;
-            animation: gradientWave 15s ease infinite;
-            color: #ffffff; font-family: 'Segoe UI', sans-serif; padding: 30px 15px; min-height: 100vh;
-        }
-        @keyframes gradientWave { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .container { max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, rgba(255, 0, 127, 0.2), rgba(127, 0, 255, 0.25)); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 25px; padding: 30px; backdrop-filter: blur(15px); }
-        .center-title { text-align: center; font-size: 2.5rem; font-weight: 800; background: linear-gradient(90deg, #00f0ff, #ff007f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
-        .yt-logo { width: 50px; height: 50px; fill: #ff0000; display: block; margin: 10px auto 25px auto; }
-        .input-url { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); color: #fff; font-size: 1rem; margin-bottom: 15px; outline: none; }
-        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; margin-bottom: 15px; }
-        .btn-take { background: #00f0ff; color: #030305; }
-        .btn-vid { background: #ff007f; color: white; }
-        .btn-aud { background: #7f00ff; color: white; }
-        .ytinfo { display: none; background: rgba(0,0,0,0.5); border-radius: 15px; padding: 20px; border: 1px solid rgba(255, 255, 255, 0.1); }
-        .video-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; color: rgba(255,255,255,0.5); }
-        .info-txt { font-size: 0.95rem; margin-bottom: 8px; word-break: break-all; }
-        .back-link { display: block; text-align: center; margin-top: 20px; color: #00f0ff; text-decoration: none; font-weight: 600; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #000; color: #fff; min-height: 100vh; padding: 30px 15px; display: flex; flex-direction: column; align-items: center; }
+        .title-top { font-size: 2.2rem; font-weight: 700; background: linear-gradient(45deg, #ff007f, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+        .logo-yt { font-size: 3rem; color: #ff0000; margin-bottom: 25px; filter: drop-shadow(0 0 10px rgba(255,0,0,0.4)); }
+        .app-box { width: 100%; max-width: 550px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(123, 44, 191, 0.25)); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
+        .input-url { width: 100%; padding: 14px 20px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 30px; color: #fff; font-size: 0.95rem; outline: none; margin-bottom: 15px; }
+        .input-url:focus { border-color: #ff007f; }
+        .btn-action { width: 100%; padding: 14px; background: linear-gradient(90deg, #ff0000, #7b2cbf); border: none; border-radius: 30px; color: #fff; font-weight: 600; cursor: pointer; }
+        .yt-info-panel { display: none; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .media-container { width: 100%; height: 200px; background: #111; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .info-meta { font-size: 0.9rem; margin-bottom: 15px; color: #cbd5e0; }
+        .dl-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-dl { padding: 12px; border-radius: 30px; border: none; text-align: center; color: #fff; font-weight: 600; font-size: 0.9rem; cursor: pointer; text-decoration: none; }
+        .btn-video { background: #ff0000; }
+        .btn-audio { background: #00f2fe; color: #000; }
     </style>
 </head>
 <body>
+    <h1 class="title-top">ZyrClient</h1>
+    <div class="logo-yt"><i class="fab fa-youtube"></i></div>
 
-    <div class="container">
-        <div class="center-title">ZyrClient</div>
-        <svg class="yt-logo" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93 Red .502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    <div class="app-box">
+        <input type="text" class="input-url" id="ytUrl" placeholder="Masukkan Link YouTube Video...">
+        <button class="btn-action" onclick="processYoutube()">Take</button>
 
-        <input type="text" class="input-url" id="ytUrl" placeholder="Masukkan Link Video YouTube...">
-        <button class="btn btn-take" id="takeBtn" onclick="parseYoutube()">Take</button>
-
-        <div class="ytinfo" id="ytPanel">
-            <div class="video-box" id="ytVideoPlayer">
-                Preview Video YouTube Terpilih
+        <div class="yt-info-panel" id="ytPanel">
+            <div class="media-container">
+                <i class="fab fa-youtube" style="font-size: 4rem; color: rgba(255,0,0,0.4);"></i>
             </div>
-            
-            <div class="info-txt"><strong>Link:</strong> <span id="infoLink" style="color:#00f0ff;">-</span></div>
-            <div class="info-txt" style="margin-bottom: 20px;"><strong>Caption:</strong> <span id="infoTitle">-</span></div>
-
-            <div style="margin-bottom:10px; font-weight:600; color:#00f0ff;">Kolom Hasil Convert:</div>
-            <button class="btn btn-vid" id="dlYtVid">Download Video Yt</button>
-            <button class="btn btn-aud" id="dlYtMp3">Mp3</button>
+            <div class="info-meta">
+                <p><strong>Link:</strong> <span id="metaLink" style="color:#00f2fe;">-</span></p>
+                <p><strong>Caption:</strong> <span id="metaCap">YouTube Stream Resource Connection</span></p>
+            </div>
+            <div class="dl-buttons">
+                <a href="#" class="btn-dl btn-video" id="dlYtVideo" target="_blank">Download Video Yt</a>
+                <a href="#" class="btn-dl btn-audio" id="dlYtMp3" target="_blank">Mp3</a>
+            </div>
         </div>
-
-        <a href="index.html" class="back-link">← Kembali ke Dashboard</a>
     </div>
 
     <script>
-        function extractYtId(url) {
+        function processYoutube() {
+            const url = document.getElementById('ytUrl').value;
+            if(!url) return alert('Masukkan link YouTube terlebih dahulu!');
+            
+            document.getElementById('metaLink').innerText = url;
+            // Menggunakan pengalihan sistem konversi pihak ketiga yang andal tanpa gangguan CORS
+            const videoId = extractVideoId(url);
+            if(videoId) {
+                document.getElementById('dlYtVideo').href = `https://9xbuddy.com/process?url=${encodeURIComponent(url)}`;
+                document.getElementById('dlYtMp3').href = `https://320ytmp3.com/convert?url=${encodeURIComponent(url)}`;
+                document.getElementById('ytPanel').style.display = 'block';
+            } else {
+                alert('Format URL YouTube tidak valid!');
+            }
+        }
+
+        function extractVideoId(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             const match = url.match(regExp);
             return (match && match[2].length === 11) ? match[2] : null;
-        }
-
-        async function parseYoutube() {
-            const url = document.getElementById('ytUrl').value.trim();
-            const btn = document.getElementById('takeBtn');
-            const panel = document.getElementById('ytPanel');
-
-            if(!url) { alert('Masukkan link YouTube terlebih dahulu!'); return; }
-            const videoId = extractYtId(url);
-            if(!videoId) { alert('Link YouTube tidak valid!'); return; }
-
-            btn.innerText = 'Mengonversi Komponen MP3...';
-            btn.disabled = true;
-
-            try {
-                document.getElementById('ytVideoPlayer').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="border-radius:10px;"></iframe>`;
-                document.getElementById('infoLink').innerText = url;
-                document.getElementById('infoTitle').innerText = "YouTube Video Studio Fetch Engine (" + videoId + ")";
-                
-                // Route Download Eksternal Universal aman dari pemutusan jaringan API internal
-                document.getElementById('dlYtVid').onclick = () => window.open(`https://api.deveper.com/download/ytvideo?url=${encodeURIComponent(url)}`, '_blank');
-                document.getElementById('dlYtMp3').onclick = () => window.open(`https://api.deveper.com/download/ytmp3?url=${encodeURIComponent(url)}`, '_blank');
-
-                panel.style.display = 'block';
-            } catch(e) {
-                alert('Gangguan parsing stream media. Tautan dialihkan otomatis ke server konversi eksternal.');
-            } finally {
-                btn.innerText = 'Take';
-                btn.disabled = false;
-            }
         }
     </script>
 </body>

@@ -3,127 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - Dashboard API</title>
+    <title>ZyrClient - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background: #030305;
-            background-image: linear-gradient(45deg, #ff007f, #7f00ff, #00f0ff, #00ff7f, #ff0000, #ff007f);
-            background-size: 400% 400%;
-            animation: gradientWave 15s ease infinite;
-            color: #ffffff;
-            font-family: 'Segoe UI', sans-serif;
-            min-height: 100vh;
-            padding: 40px 20px;
-            overflow-y: auto;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #000; color: #fff; min-height: 100vh; overflow-x: hidden; position: relative; padding: 40px 20px; }
+        
+        .bg-glow {
+            position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 0, 127, 0.12), rgba(0, 242, 254, 0.12), transparent 60%);
+            filter: blur(60px);
         }
-        @keyframes gradientWave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+
+        .header { text-align: center; margin-bottom: 50px; }
+        .main-title {
+            font-size: 3.5rem; font-weight: 700;
+            background: linear-gradient(45deg, #ff007f, #00f2fe);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
+        .subtitle { color: #a0aec0; font-size: 1rem; margin-top: 10px; font-weight: 400; }
+
+        .menu-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px; max-width: 1100px; margin: 0 auto; width: 100%;
         }
-        .header h1 {
-            font-size: 3.8rem;
-            font-weight: 900;
-            background: linear-gradient(90deg, #00f0ff, #ff007f);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-        .header p {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.75);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .panel-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+
         .panel-card {
-            background: linear-gradient(135deg, rgba(255, 0, 127, 0.25), rgba(127, 0, 255, 0.35));
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            backdrop-filter: blur(15px);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 180px;
+            background: linear-gradient(135deg, rgba(255, 0, 127, 0.15), rgba(123, 44, 191, 0.3));
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            border-radius: 18px; padding: 30px 20px; text-align: center;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         .panel-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.4), 0 0 15px rgba(0, 240, 255, 0.2);
-            border-color: rgba(0, 240, 255, 0.5);
+            transform: translateY(-5px);
+            border-color: rgba(255, 0, 127, 0.6);
+            box-shadow: 0 10px 25px rgba(255, 0, 127, 0.25), 0 0 15px rgba(0, 242, 254, 0.2);
         }
-        .icon-container {
-            width: 65px;
-            height: 65px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .icon-container svg {
-            width: 100%;
-            height: 100%;
-            fill: #ffffff;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
-        }
-        .panel-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
+        
+        .panel-card i { font-size: 3rem; margin-bottom: 15px; }
+        .panel-card.tiktok i { color: #00f2fe; text-shadow: 0 0 15px rgba(0,242,254,0.4); }
+        .panel-card.quality i { color: #00ff80; text-shadow: 0 0 15px rgba(0,255,128,0.4); }
+        .panel-card.remini i { color: #ff007f; text-shadow: 0 0 15px rgba(255,0,127,0.4); }
+        .panel-card.youtube i { color: #ff0000; text-shadow: 0 0 15px rgba(255,0,0,0.4); }
+
+        .panel-card h3 { font-size: 1.25rem; font-weight: 600; color: #fff; letter-spacing: 0.5px; }
     </style>
 </head>
 <body>
-
+    <div class="bg-glow"></div>
     <div class="header">
-        <h1>ZyrClient</h1>
-        <p>Selamat datang di ZyrClient, api fungsi gratis untuk downloader.</p>
+        <h1 class="main-title">ZyrClient</h1>
+        <p class="subtitle">Selamat datang di ZyrClient, api fungsi gratis untuk downloader.</p>
     </div>
 
-    <div class="panel-grid">
-        <div class="panel-card" onclick="location.href='TiktokD.html'">
-            <div class="icon-container">
-                <svg viewBox="0 0 24 24"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.06-2.89-.52-4.06-1.39v7.57c.06 2.05-.6 4.19-2.11 5.59-1.68 1.64-4.22 2.27-6.49 1.7-2.39-.54-4.52-2.39-5.25-4.73-.85-2.58-.17-5.63 1.73-7.53 1.63-1.67 4.11-2.33 6.36-1.72V11c-1.39-.45-3.03-.13-4.1.84-1.14 1.01-1.51 2.69-1.02 4.13.43 1.39 1.73 2.47 3.19 2.59 1.62.19 3.28-.74 3.79-2.3.17-.46.22-.95.21-1.44V.02z"/></svg>
-            </div>
-            <div class="panel-title">Tiktok Downloader</div>
+    <div class="menu-grid">
+        <div class="panel-card tiktok" onclick="location.href='TiktokD.html'">
+            <i class="fab fa-tiktok"></i>
+            <h3>Tiktok</h3>
         </div>
-
-        <div class="panel-card" onclick="location.href='Upq.html'">
-            <div class="icon-container">
-                <svg viewBox="0 0 24 24"><path d="M4 20h16v2H4zm8-18l-8 8h5v6h6v-6h5z"/></svg>
-            </div>
-            <div class="panel-title">Up Quality</div>
+        <div class="panel-card quality" onclick="location.href='Upq.html'">
+            <i class="fas fa-arrow-up-9-1"></i>
+            <h3>Up Quality</h3>
         </div>
-
-        <div class="panel-card" onclick="location.href='Reminihd.html'">
-            <div class="icon-container">
-                <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.3h7.6l-6.2 4.5 2.4 7.2-6.2-4.5-6.2 4.5 2.4-7.2-6.2-4.5h7.6zM12 6.5l-.9 2.8h-2.9l2.3 1.7-.9 2.7 2.4-1.7 2.3 1.7-.9-2.7 2.3-1.7h-2.9z"/></svg>
-            </div>
-            <div class="panel-title">Hd Remini</div>
+        <div class="panel-card remini" onclick="location.href='Reminihd.html'">
+            <i class="fas fa-wand-magic-sparkles"></i>
+            <h3>Hd Remini</h3>
         </div>
-
-        <div class="panel-card" onclick="location.href='Ytmp3.html'">
-            <div class="icon-container">
-                <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            </div>
-            <div class="panel-title">YT MP3</div>
+        <div class="panel-card youtube" onclick="location.href='Ytmp3.html'">
+            <i class="fab fa-youtube"></i>
+            <h3>YT MP3</h3>
         </div>
     </div>
-
 </body>
 </html>

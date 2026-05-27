@@ -4,109 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZyrClient - Loading</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body {
-            background: #030305;
-            background-image: linear-gradient(45deg, #ff007f, #7f00ff, #00f0ff, #00ff7f, #ff0000, #ff007f);
-            background-size: 400% 400%;
-            animation: gradientWave 12s ease infinite;
+            background: #000;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             overflow: hidden;
+            position: relative;
         }
-        @keyframes gradientWave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Animated Wave Background */
+        .bg-glow {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 242, 254, 0.15), transparent 40%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 0, 128, 0.15), transparent 40%),
+                        radial-gradient(circle at 50% 80%, rgba(0, 255, 128, 0.1), transparent 50%),
+                        radial-gradient(circle at 10% 70%, rgba(255, 0, 0, 0.1), transparent 40%);
+            filter: blur(40px);
+            animation: pulseBg 8s infinite alternate linear;
         }
-        .main-container {
-            text-align: center;
-            transition: transform 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.6s ease;
-        }
-        .fall-animation {
-            transform: translateY(100vh) scale(0.8);
-            opacity: 0;
-        }
+        @keyframes pulseBg { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+
+        .container { z-index: 2; text-align: center; width: 90%; max-width: 450px; }
+        
         .title {
-            font-size: 3.5rem;
-            font-weight: 900;
-            margin-bottom: 25px;
-            background: linear-gradient(90deg, #00f0ff, #ff007f, #7f00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
-            letter-spacing: 2px;
+            font-size: 3.5rem; font-weight: 800; margin-bottom: 20px;
+            background: linear-gradient(45deg, #00f2fe, #ff007f, #00ff80);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 0, 127, 0.3);
         }
+
         .progress-box {
-            width: 300px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 6px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            margin: 0 auto;
+            width: 100%; background: rgba(255, 255, 255, 0.05);
+            padding: 4px; border-radius: 30px; border: 1px solid rgba(0, 242, 254, 0.2);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);
             position: relative;
         }
         .progress-bar {
-            height: 16px;
-            width: 0%;
-            background: linear-gradient(90deg, #00f0ff, #ff007f);
-            border-radius: 50px;
-            box-shadow: 0 0 15px #ff007f;
-            position: relative;
+            height: 24px; width: 0%;
+            background: linear-gradient(90deg, #ff007f, #7b2cbf, #00f2fe);
+            background-size: 200% 200%;
+            animation: gradientShift 3s infinite linear;
+            border-radius: 30px; display: flex; align-items: center; justify-content: flex-end;
+            transition: width 0.1s linear;
         }
         .percentage {
-            margin-top: 15px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            color: #fff; font-size: 0.85rem; font-weight: 600; padding-right: 12px;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; }
+        }
+        /* Fall animation trigger */
+        .fall-animation { animation: barDrop 1.2s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards; }
+        @keyframes barDrop {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(15deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
-
-    <div class="main-container" id="loadingWrapper">
-        <div class="title">ZyrClient</div>
-        <div class="progress-box">
-            <div class="progress-bar" id="progressBar"></div>
+    <div class="bg-glow"></div>
+    <div class="container" id="loadingStage">
+        <h1 class="title">ZyrClient</h1>
+        <div class="progress-box" id="pBox">
+            <div class="progress-bar" id="pBar">
+                <span class="percentage" id="pText">0%</span>
+            </div>
         </div>
-        <div class="percentage" id="percentText">0%</div>
     </div>
 
     <script>
-        const progressBar = document.getElementById('progressBar');
-        const percentText = document.getElementById('percentText');
-        const loadingWrapper = document.getElementById('loadingWrapper');
-        
+        const pBar = document.getElementById('pBar');
+        const pText = document.getElementById('pText');
+        const pBox = document.getElementById('pBox');
         let progress = 0;
-        const duration = 10000; // Minimal 10 Detik Pemuatan
-        const intervalTime = 100; 
-        const step = (100 / (duration / intervalTime));
+        const duration = 10000; // Minimal 10 Detik terisi penuh
+        const intervalTime = duration / 100;
 
         const timer = setInterval(() => {
-            progress += step;
+            progress++;
+            pBar.style.width = progress + '%';
+            pText.innerText = progress + '%';
+
             if (progress >= 100) {
-                progress = 100;
                 clearInterval(timer);
-                
-                progressBar.style.width = '100%';
-                percentText.innerText = '100%';
-                
-                // Triger animasi jatuh sebelum pindah halaman
                 setTimeout(() => {
-                    loadingWrapper.classList.add('fall-animation');
+                    pBox.classList.add('fall-animation');
                     setTimeout(() => {
                         window.location.href = 'index.html';
-                    }, 600);
+                    }, 1000);
                 }, 500);
-            } else {
-                progressBar.style.width = progress + '%';
-                percentText.innerText = Math.floor(progress) + '%';
             }
         }, intervalTime);
     </script>
