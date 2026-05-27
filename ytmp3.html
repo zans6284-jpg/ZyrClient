@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZyrClient YT MP3</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="wave-bg"></div>
+
+<div class="page-container">
+
+<h1 class="gradient-title">ZyrClient</h1>
+
+<div class="page-logo-box">
+<div class="logo-circle yt-logo"></div>
+<h2>YouTube MP3</h2>
+</div>
+
+<input type="text" id="ytUrl" class="modern-input" placeholder="Masukkan link YouTube">
+
+<button class="main-btn" onclick="takeYT()">Take</button>
+
+<div class="info-panel" id="ytInfo">
+
+<video id="ytVideo" controls></video>
+
+<div class="caption-box" id="ytCaption"></div>
+
+<audio id="ytAudio" controls></audio>
+
+<a id="downloadYTVideo" class="main-btn" download>Download Video YT</a>
+<a id="downloadYTMP3" class="main-btn secondary-btn" download>MP3</a>
+
+</div>
+
+</div>
+
+<script src="js/ytmp3.js"></script>
+</body>
+</html>

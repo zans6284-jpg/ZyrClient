@@ -1,74 +1,43 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZyrClient - Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background: #000; color: #fff; min-height: 100vh; position: relative; padding: 50px 20px; overflow-x: hidden; }
-        
-        .wave-bg {
-            position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 0, 127, 0.1), rgba(0, 242, 254, 0.1), transparent 70%);
-            filter: blur(60px);
-        }
-
-        .header-section { text-align: center; margin-bottom: 50px; }
-        .main-title { font-size: 3.5rem; font-weight: 700; background: linear-gradient(45deg, #ff007f, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .subtitle { color: #b3b3b3; font-size: 1rem; margin-top: 12px; }
-
-        .panel-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 20px; max-width: 1000px; margin: 0 auto; width: 100%;
-        }
-
-        .card-panel {
-            background: linear-gradient(135deg, rgba(255, 0, 127, 0.12), rgba(123, 44, 191, 0.25));
-            border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 16px;
-            padding: 35px 20px; text-align: center; cursor: pointer;
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s, box-shadow 0.3s;
-            backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center;
-        }
-        .card-panel:hover {
-            transform: translateY(-6px); border-color: rgba(255, 0, 127, 0.5);
-            box-shadow: 0 12px 24px rgba(255, 0, 127, 0.2), 0 0 15px rgba(0, 242, 254, 0.15);
-        }
-        
-        .card-panel i { font-size: 3rem; margin-bottom: 15px; }
-        .card-panel.tk i { color: #00f2fe; }
-        .card-panel.uq i { color: #00ff80; }
-        .card-panel.rm i { color: #ff007f; }
-        .card-panel.yt i { color: #ff0000; }
-        .card-panel h3 { font-size: 1.2rem; font-weight: 600; color: #fff; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZyrClient</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="wave-bg"></div>
-    <div class="header-section">
-        <h1 class="main-title">ZyrClient</h1>
-        <p class="subtitle">Selamat datang di ZyrClient, api fungsi gratis untuk downloader.</p>
-    </div>
 
-    <div class="panel-grid">
-        <div class="card-panel tk" onclick="location.href='TiktokD.html'">
-            <i class="fab fa-tiktok"></i>
-            <h3>Tiktok</h3>
-        </div>
-        <div class="card-panel uq" onclick="location.href='Upq.html'">
-            <i class="fas fa-arrow-up-right-dots"></i>
-            <h3>Up Quality</h3>
-        </div>
-        <div class="card-panel rm" onclick="location.href='Reminihd.html'">
-            <i class="fas fa-wand-magic-sparkles"></i>
-            <h3>Hd Remini</h3>
-        </div>
-        <div class="card-panel yt" onclick="location.href='Ytmp3.html'">
-            <i class="fab fa-youtube"></i>
-            <h3>YT MP3</h3>
-        </div>
-    </div>
+<div class="wave-bg"></div>
+
+<header class="main-header">
+<h1 class="gradient-title">ZyrClient</h1>
+<p class="subtitle">Selamat datang di ZyrClient, api fungsi gratis untuk downloader.</p>
+</header>
+
+<section class="card-grid">
+
+<a href="tiktokd.html" class="feature-card">
+<div class="logo-circle tiktok-logo"></div>
+<h2>TikTok Downloader</h2>
+</a>
+
+<a href="upq.html" class="feature-card">
+<div class="logo-circle up-logo"></div>
+<h2>Up Quality</h2>
+</a>
+
+<a href="reminihd.html" class="feature-card">
+<div class="logo-circle remini-logo"></div>
+<h2>HD Remini</h2>
+</a>
+
+<a href="ytmp3.html" class="feature-card">
+<div class="logo-circle yt-logo"></div>
+<h2>YT MP3</h2>
+</a>
+
+</section>
+
 </body>
 </html>

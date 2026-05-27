@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZyrClient TikTok Downloader</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="wave-bg"></div>
+
+<div class="page-container">
+
+<h1 class="gradient-title">ZyrClient</h1>
+
+<div class="page-logo-box">
+<div class="logo-circle tiktok-logo"></div>
+<h2>TikTok Downloader</h2>
+</div>
+
+<input type="text" id="tiktokUrl" class="modern-input" placeholder="Masukkan link TikTok">
+
+<button class="main-btn" onclick="takeVideo()">Take Video</button>
+
+<div class="info-panel" id="infoPanel">
+
+<video id="videoPreview" controls></video>
+
+<div class="info-text">
+<p>👤 Username: <span id="username"></span></p>
+<p>♥️ Like: <span id="like"></span></p>
+<p>💬 Komentar: <span id="comment"></span></p>
+<p>🔶 Favorit: <span id="favorite"></span></p>
+<p>👥 Views: <span id="views"></span></p>
+<p>🌐 Region: <span id="region"></span></p>
+</div>
+
+<div class="caption-box" id="caption"></div>
+
+<a id="downloadVideo" class="main-btn" download>Download</a>
+<a id="downloadSound" class="main-btn secondary-btn" download>Download Sound</a>
+
+</div>
+
+</div>
+
+<script src="js/tiktok.js"></script>
+</body>
+</html>
