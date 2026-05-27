@@ -3,41 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer"> 
     <title>ZyrClient - TikTok Downloader</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background: #000; color: #fff; min-height: 100vh; padding: 30px 15px; display: flex; flex-direction: column; align-items: center; }
-        
         .header-title { font-size: 2.2rem; font-weight: 700; background: linear-gradient(45deg, #ff007f, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
-        
-        .container-box { 
-            width: 100%; max-width: 500px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(123, 44, 191, 0.2));
-            border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px);
-        }
+        .container-box { width: 100%; max-width: 500px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(123, 44, 191, 0.2)); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
         .sub-brand { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.25rem; font-weight: 600; color: #00f2fe; margin-bottom: 20px; }
-        
-        .input-bar { 
-            width: 100%; padding: 14px 20px; background: rgba(0, 0, 0, 0.7); border: 1px solid rgba(0, 242, 254, 0.3);
-            border-radius: 30px; color: #fff; font-size: 0.95rem; outline: none; margin-bottom: 15px; transition: border-color 0.3s;
-        }
+        .input-bar { width: 100%; padding: 14px 20px; background: rgba(0, 0, 0, 0.7); border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 30px; color: #fff; font-size: 0.95rem; outline: none; margin-bottom: 15px; transition: border-color 0.3s; }
         .input-bar:focus { border-color: #ff007f; }
-
-        .btn-submit {
-            width: 100%; padding: 14px; background: linear-gradient(90deg, #ff007f, #7b2cbf); border: none;
-            border-radius: 30px; color: #fff; font-weight: 600; cursor: pointer; transition: 0.3s;
-        }
+        .btn-submit { width: 100%; padding: 14px; background: linear-gradient(90deg, #ff007f, #7b2cbf); border: none; border-radius: 30px; color: #fff; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .btn-submit:hover { opacity: 0.9; transform: scale(0.99); }
-
         .infotd-panel { display: none; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
         .preview-media { width: 100%; border-radius: 12px; margin-bottom: 15px; background: #000; max-height: 280px; object-fit: contain; }
-        
         .data-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .data-item { background: rgba(255,255,255,0.04); padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
         .data-item i { color: #ff007f; width: 16px; }
-
-        .caption-area { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; font-size: 0.85rem; color: #d1d5db; margin-bottom: 20px; border-left: 3px solid #ff007f; }
+        .caption-area { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; font-size: 0.85rem; color: #d1d5db; margin-bottom: 20px; border-left: 3px solid #ff007f; word-wrap: break-word; }
         .btn-dl-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn-dl { padding: 12px; border-radius: 30px; border: none; color: #fff; font-weight: 600; text-align: center; text-decoration: none; font-size: 0.9rem; }
         .btn-vid { background: #00f2fe; color: #000; }
@@ -52,7 +37,7 @@
         <button class="btn-submit" id="btnAction" onclick="loadTiktok()">Take Video</button>
 
         <div class="infotd-panel" id="infotd">
-            <video class="preview-media" id="mediaPreview" controls></video>
+            <video class="preview-media" id="mediaPreview" controls autoplay></video>
             <div class="data-list">
                 <div class="data-item"><i class="fas fa-user"></i> Username: <span id="valUser">-</span></div>
                 <div class="data-item"><i class="fas fa-heart"></i> Like: <span id="valLike">-</span></div>
@@ -74,29 +59,40 @@
             const url = document.getElementById('inputUrl').value;
             const btn = document.getElementById('btnAction');
             if(!url) return alert('Input Link Kosong!');
-            btn.innerText = 'Mengambil Data...';
+            
+            btn.innerText = 'Mengambil Data via Proxy...';
             
             try {
-                const response = await fetch(`https://api.tikwm.com/api/?url=${encodeURIComponent(url)}`);
-                const res = await response.json();
+                // Bypass CORS menggunakan AllOrigins proxy
+                const targetApi = `https://api.tikwm.com/api/?url=${encodeURIComponent(url)}`;
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetApi)}`;
+                
+                const response = await fetch(proxyUrl);
+                const proxyData = await response.json();
+                const res = JSON.parse(proxyData.contents); // Ekstrak string JSON dari proxy
+                
                 if(res.code === 0 && res.data) {
                     const d = res.data;
                     document.getElementById('mediaPreview').src = d.play;
                     document.getElementById('valUser').innerText = d.author.unique_id;
-                    document.getElementById('valLike').innerText = d.digg_count;
-                    document.getElementById('valKom').innerText = d.comment_count;
-                    document.getElementById('valFav').innerText = d.collect_count;
-                    document.getElementById('valView').innerText = d.play_count;
+                    document.getElementById('valLike').innerText = d.digg_count.toLocaleString('id-ID');
+                    document.getElementById('valKom').innerText = d.comment_count.toLocaleString('id-ID');
+                    document.getElementById('valFav').innerText = d.collect_count.toLocaleString('id-ID');
+                    document.getElementById('valView').innerText = d.play_count.toLocaleString('id-ID');
                     document.getElementById('valReg').innerText = d.region || 'ID';
-                    document.getElementById('valCap').innerText = d.title || 'No Caption';
+                    document.getElementById('valCap').innerText = d.title || 'Tidak ada caption';
                     document.getElementById('dlVid').href = d.play;
                     document.getElementById('dlAud').href = d.music;
                     document.getElementById('infotd').style.display = 'block';
-                } else { alert('Gagal mengurai tautan video.'); }
+                } else { 
+                    alert('Gagal mengurai tautan video. Pastikan link bukan akun private.'); 
+                }
             } catch (e) {
-                alert('Mengaktifkan penanganan cadangan proteksi jaringan.');
-                document.getElementById('infotd').style.display = 'block';
-            } finally { btn.innerText = 'Take Video'; }
+                console.error(e);
+                alert('Terjadi kegagalan jaringan CORS. Coba gunakan koneksi atau VPN lain.');
+            } finally { 
+                btn.innerText = 'Take Video'; 
+            }
         }
     </script>
 </body>
